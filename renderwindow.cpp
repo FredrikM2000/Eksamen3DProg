@@ -32,11 +32,6 @@ RenderWindow::RenderWindow(const QSurfaceFormat &format, MainWindow *mainWindow)
         qDebug() << "Context could not be made - quitting this application";
     }
 
-
-    // **************************************
-     // Legger inn objekter i quadtre
-     // **************************************
-
      Point2D a{0, 0}, b{100, 0}, c{100, 100}, d{0, 100};
      mQuadTre = new QuadTree(a,b,c,d);
      mQuadTre->subDivide(3);
@@ -140,10 +135,12 @@ void RenderWindow::init()
     mQuadTre->init(mMatrixUniform0);
     mVisualObjects.push_back(mQuadTre);// [0]
 
+    // Oppgave2
     mHeightmap = new Heightmap();
     mHeightmap->init(mMatrixUniform2);
     mVisualObjects.push_back(mHeightmap);// [1]
 
+    //Oppgave 3
     mLight = new Light();
     mLight->init(mMatrixUniform0);
 //    mLight->createObj();
@@ -151,6 +148,7 @@ void RenderWindow::init()
     mLight->mMatrix.scale(5.f);
     mVisualObjects.push_back(mLight);// [2]
 
+    //Oppgave 4
     mia = new InteractiveObject();
     mia->init(mMatrixUniform2);
     mia->createCollisionBox();
@@ -158,6 +156,10 @@ void RenderWindow::init()
     mVisualObjects.push_back(mia);// [3]
     mMap.insert(std::pair<std::string, VisualObject*>{"mia", mia});
 
+    //Oppgave 5
+    cameraMesh = new ObjMesh("../Eksamen3DProg/Assets/obj_files/Camera.obj", false, 0,0,1);
+    cameraMesh->init(mMatrixUniform0);
+    mVisualObjects.push_back(cameraMesh);// [4]
 
 
     //**********Set up camera************
@@ -165,6 +167,10 @@ void RenderWindow::init()
     mCurrentCamera->setPosition(gsl::Vector3D(2.0f, 20.f, 15.f));
     mCurrentCamera->pitch(40.f);
     mCurrentCamera->yaw(-5.f);
+
+    // Oppgave 5
+    cameraMesh->mMatrix.rotateX(40);
+    cameraMesh->mMatrix.rotateY(-5);
 
     glBindVertexArray(0);
     checkForGLerrors();
@@ -177,6 +183,7 @@ void RenderWindow::render()
 {
     handleInput();
 
+//    mCurrentCamera->lookAt(10,10,10);
     mCurrentCamera->update();
 
     mTimeStart.restart(); //restart FPS clock
@@ -224,6 +231,16 @@ void RenderWindow::render()
     glUniform1i(mTextureUniform2, 1);
 
     mVisualObjects[3]->draw();
+
+
+    // Oppgave 5
+    if(specMode)
+        drawObject(0,4);
+    else
+        cameraMesh->mMatrix.setPosition(mCurrentCamera->getPosition().x, mCurrentCamera->getPosition().y, mCurrentCamera->getPosition().z);
+
+
+
 
     //Calculate framerate before
     // checkForGLerrors() because that call takes a long time
@@ -495,14 +512,17 @@ void RenderWindow::keyPressEvent(QKeyEvent *event)
         if(specMode)
         {
             specMode = false;
-            mCurrentCamera->pitch(mCurrentCamera->getPitch() + 40);
-            mCurrentCamera->yaw(mCurrentCamera->getYaw() - 5);
+//            mCurrentCamera->pitch(mCurrentCamera->getPitch() + 40);
+//            mCurrentCamera->yaw(mCurrentCamera->getYaw() - 5);
 
+            mCurrentCamera->switchView();
             glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
             poly = false;
         }
-        else if(!specMode)
+        else if(!specMode){
             specMode = true;
+            mCurrentCamera->switchView();
+        }
     }
 
     if(event->key() == Qt::Key_E)
@@ -572,6 +592,7 @@ void RenderWindow::mouseMoveEvent(QMouseEvent *event)
 //        qDebug() << mouseY;
         mCurrentCamera->yaw(mouseX * 0.1);
         mCurrentCamera->pitch(mouseY * 0.1);
+
     }
     mouseX = event->pos().x();
     mouseY = event->pos().y();

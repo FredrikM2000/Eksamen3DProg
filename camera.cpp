@@ -70,6 +70,11 @@ void Camera::setPosition(const gsl::Vector3D &position)
     update();
 }
 
+gsl::Vector3D Camera::getPosition()
+{
+    return mPosition;
+}
+
 void Camera::setSpeed(float speed)
 {
     mSpeed = speed;
@@ -115,6 +120,34 @@ float Camera::getPitch()
 float Camera::getYaw()
 {
     return mYaw;
+}
+
+void Camera::switchView() // oppgave 5
+{
+    if(bPlayerView)
+    {
+        bPlayerView = false;
+
+        playerViewPos = mPosition;
+        playerViewPitch = mPitch;
+        playerViewYaw = mYaw;
+
+        mPosition = specViewPos;
+        mPitch = specViewPitch;
+        mYaw = specViewYaw;
+    }
+    else
+    {
+    bPlayerView = true;
+
+    specViewPos = mPosition;
+    specViewPitch = mPitch;
+    specViewYaw = mYaw;
+
+    mPosition = playerViewPos;
+    mPitch =    playerViewPitch;
+    mYaw =      playerViewYaw;
+    }
 }
 
 

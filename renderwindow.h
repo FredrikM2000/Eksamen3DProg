@@ -91,6 +91,7 @@ private:
     NPC* npc;
     VisualCurve* curve;
     VisualCurve* curve1;
+    ObjMesh* cameraMesh;
 
     Trofee* trof0;
     Trofee* trof1;

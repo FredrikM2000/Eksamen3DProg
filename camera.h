@@ -21,6 +21,7 @@ public:
     gsl::Matrix4x4 mProjectionMatrix;
 
     void setPosition(const gsl::Vector3D &position);
+    gsl::Vector3D getPosition();
 
     void setSpeed(float speed);
     void updateHeigth(float deltaHeigth);
@@ -33,7 +34,19 @@ public:
     float getPitch();
     float getYaw();
 
+    void switchView();
 private:
+
+    bool bPlayerView{true};
+
+    gsl::Vector3D playerViewPos;
+    float playerViewPitch{0.f};
+    float playerViewYaw{0.f};
+
+    gsl::Vector3D specViewPos{50,60,100};
+    float specViewPitch{-30.f};
+    float specViewYaw{0.f};
+
     gsl::Vector3D mForward{0.f, 0.f, -1.f};
     gsl::Vector3D mRight{1.f, 0.f, 0.f};
     gsl::Vector3D mUp{0.f, 1.f, 0.f};

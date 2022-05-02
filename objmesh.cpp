@@ -166,7 +166,8 @@ void ObjMesh::init(GLint matrixUniform)
 
 void ObjMesh::draw()
 {
-    glBindVertexArray(mVAO);
-    glDrawElements(GL_TRIANGLES, mIndices.size(), GL_UNSIGNED_INT, nullptr);
-    glBindVertexArray(0);
+        glBindVertexArray(mVAO);
+        glDrawElements(GL_TRIANGLES, mIndices.size(), GL_UNSIGNED_INT, nullptr);
+        glBindVertexArray(0);
+
 }
