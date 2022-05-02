@@ -124,8 +124,8 @@ void RenderWindow::init()
 //*************Texture stuff**************
 
     mTexture[0] = new Texture();
-    mTexture[1] = new Texture("../Eksamen3DProg/Assets/heightmap.bmp");
-    mTexture[2] = new Texture("../Eksamen3DProg/Assets/Grass.bmp");
+    mTexture[1] = new Texture("../Eksamen3DProg/Assets/PlayerTexture.bmp");
+    mTexture[2] = new Texture("../Eksamen3DProg/Assets/Grass.bmp");//Tekstur hentet fra https://www.creativeswall.com/65-free-high-resolution-grass-textures/
 
     //set the textures loaded to a texture unit (also called texture slot)
     glActiveTexture(GL_TEXTURE0);
@@ -152,9 +152,9 @@ void RenderWindow::init()
     mVisualObjects.push_back(mLight);// [2]
 
     mia = new InteractiveObject();
-    mia->init(mMatrixUniform0);
+    mia->init(mMatrixUniform2);
     mia->createCollisionBox();
-    mia->mMatrix.scale(4);
+    mia->mMatrix.setPosition(50,0,70);
     mVisualObjects.push_back(mia);// [3]
     mMap.insert(std::pair<std::string, VisualObject*>{"mia", mia});
 
@@ -210,9 +210,20 @@ void RenderWindow::render()
     mLight->mMatrix.translateY(0.03);
     mLight->mMatrix.rotateZ(0.2);
 
-//    drawObject(0,4);
+    //Oppgave 4
+    glUseProgram(mShaderProgram[2]->getProgram() );
+    // Spiller
+    glUniformMatrix4fv(vMatrixUniform2,1,GL_TRUE, mCurrentCamera->mViewMatrix.constData());
+    glUniformMatrix4fv(pMatrixUniform2,1,GL_TRUE, mCurrentCamera->mProjectionMatrix.constData());
+    glUniformMatrix4fv(mMatrixUniform2,1,GL_TRUE, mVisualObjects[3]->mMatrix.constData());
+    glUniform3f(mLightPositionUniform, mLight->mMatrix.getPosition().x, mLight->mMatrix.getPosition().y, mLight->mMatrix.getPosition().z);
+    glUniform3f(mCameraPositionUniform, mCurrentCamera->position().x, mCurrentCamera->position().y, mCurrentCamera->position().z);
+    glUniform3f(mLightColorUniform, mLight->mLightColor.x, mLight->mLightColor.y, mLight->mLightColor.y);
+    glUniform1f(mSpecularStrengthUniform,mLight->mSpecularStrength);
+    //texture
+    glUniform1i(mTextureUniform2, 1);
 
-
+    mVisualObjects[3]->draw();
 
     //Calculate framerate before
     // checkForGLerrors() because that call takes a long time
@@ -404,22 +415,21 @@ void RenderWindow::startOpenGLDebugger()
 
 void RenderWindow::handleInput()
 {
-    float speed = 1;
-    if(mInput.LShift)
-        speed = 3;
-    else if(mInput.LCtrl)
-        speed = 0.05;
+    float speed;
     if(!specMode)
     {
-        speed = speed * 0.07;
+        speed = 0.15;
         if(mInput.W)
             mMap["mia"]->mMatrix.translateZ(-speed);
         if(mInput.A)
-            mMap["mia"]->mMatrix.translateX(-speed);
+            mMap["mia"]->mMatrix.rotateY(-2);
+//            mMap["mia"]->mMatrix.translateX(-speed);
         if(mInput.S)
             mMap["mia"]->mMatrix.translateZ(speed);
-        if(mInput.D)
-            mMap["mia"]->mMatrix.translateX(speed);
+        if(mInput.D){
+            mMap["mia"]->mMatrix.rotateY(2);
+
+        }
 
         float y = mHeightmap->SetYCoord(mMap["mia"]->mMatrix.getPosition().getX(), mMap["mia"]->mMatrix.getPosition().getZ());
         mMap["mia"]->mMatrix.setPositionY(y + 1);
@@ -428,7 +438,7 @@ void RenderWindow::handleInput()
         mCurrentCamera->setPosition(mMap["mia"]->mMatrix.getPosition() + gsl::Vector3D(2, 20, 15));
     }
     else{
-        speed = speed * 0.3;
+        speed = 0.8;
         if(mInput.W)
             mCurrentCamera->moveForward(speed);
         if(mInput.A)

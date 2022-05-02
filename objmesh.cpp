@@ -8,7 +8,7 @@ ObjMesh::ObjMesh(std::string filename, bool useNormals, float r, float g, float 
 
 ObjMesh::~ObjMesh(){}
 
-
+//Oppgave 3
 void ObjMesh::readFile(std::string filename, bool useNormals, float r, float g, float b)
 {
     std::ifstream fileIn;

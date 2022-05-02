@@ -4,6 +4,7 @@
 #include "visualobject.h"
 #include "trianglesurface.h"
 #include "collisionaabb.h"
+#include "objmesh.h"
 
 class InteractiveObject : public VisualObject
 {
@@ -22,6 +23,7 @@ private:
    float mx, my, mz; // posisjon
    float distance{0.15};
 
+   ObjMesh *obj;
    CollisionAABB *collider;
 
 };

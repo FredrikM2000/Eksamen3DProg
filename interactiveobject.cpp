@@ -58,17 +58,20 @@ InteractiveObject::InteractiveObject()
 //    my = curve->function(mx,my) + 1.2f;
 
 
-    mVertices.push_back(Vertex{-0.1, -0.1, 0.1,      0,0,1});// 0
-    mVertices.push_back(Vertex{0.1, -0.1, 0.1,       1,0,1});// 1
-    mVertices.push_back(Vertex{0.1, -0.1, -0.1,      0,1,1});// 2
-    mVertices.push_back(Vertex{-0.1, -0.1, -0.1,     1,1,1});// 3
-    mVertices.push_back(Vertex{-0.1, 0.1, 0.1,       1,0,0});// 4
-    mVertices.push_back(Vertex{0.1, 0.1, 0.1,        0,1,0});// 5
-    mVertices.push_back(Vertex{0.1, 0.1, -0.1,       1,1,0});// 6
-    mVertices.push_back(Vertex{-0.1, 0.1, -0.1,      0,0,0});// 7
+//    mVertices.push_back(Vertex{-0.1, -0.1, 0.1,      0,0,1});// 0
+//    mVertices.push_back(Vertex{0.1, -0.1, 0.1,       1,0,1});// 1
+//    mVertices.push_back(Vertex{0.1, -0.1, -0.1,      0,1,1});// 2
+//    mVertices.push_back(Vertex{-0.1, -0.1, -0.1,     1,1,1});// 3
+//    mVertices.push_back(Vertex{-0.1, 0.1, 0.1,       1,0,0});// 4
+//    mVertices.push_back(Vertex{0.1, 0.1, 0.1,        0,1,0});// 5
+//    mVertices.push_back(Vertex{0.1, 0.1, -0.1,       1,1,0});// 6
+//    mVertices.push_back(Vertex{-0.1, 0.1, -0.1,      0,0,0});// 7
 
-    mIndices.insert(mIndices.end(), {0,1,4, 4,1,5, 1,2,5, 5,2,6, 2,3,6, 6,3,7, 3,0,7, 7,0,4, 0,1,2, 0,2,3, 4,5,6, 4,6,7});
+//    mIndices.insert(mIndices.end(), {0,1,4, 4,1,5, 1,2,5, 5,2,6, 2,3,6, 6,3,7, 3,0,7, 7,0,4, 0,1,2, 0,2,3, 4,5,6, 4,6,7});
 
+    //Oppgave 4
+    obj = new ObjMesh("../Eksamen3DProg/Assets/obj_files/Player.obj", true);
+    obj->init(mMatrixUniform);
 
     mx = 2.f;
     mz = 2.f;
@@ -128,6 +131,9 @@ void InteractiveObject::init(GLint matrixUniform)
 
 void InteractiveObject::draw()
 {
+    if(obj)
+        obj->draw();
+    else{
     glBindVertexArray( mVAO );
  //    glUniformMatrix4fv( mMatrixUniform, 1, GL_FALSE, mMatrix.constData());
     glDrawArrays(GL_TRIANGLES, 0, mVertices.size());
@@ -138,6 +144,7 @@ void InteractiveObject::draw()
 
 //    if(collider)
 //        collider->draw();
+    }
 }
 
 void InteractiveObject::move(float x, float y, float z)
