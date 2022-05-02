@@ -29,6 +29,44 @@ Trofee::Trofee()
     mMatrix.setToIdentity();
 }
 
+Trofee::Trofee(bool red)
+{
+    typeName = "pickup";
+    Vertex k1, k2, k3, k4;
+    if(red)
+    {
+        k1 = Vertex(0,-0.3,-0.1732,1,0,0);
+        k2 = Vertex(0.15,-0.3,0.0866,1,0,0);
+        k3 = Vertex(-0.15,-0.3,0.0866,1,0,0);
+        k4 = Vertex(0,-0.15,0,1,0,0);
+    }
+    else
+    {
+        k1 = Vertex(0,-0.3,-0.1732,0,0,1);
+        k2 = Vertex(0.15,-0.3,0.0866,0,0,1);
+        k3 = Vertex(-0.15,-0.3,0.0866,0,0,1);
+        k4 = Vertex(0,-0.15,0,0,0,1);
+    }
+    std::vector<Vertex> corners{k1,k2,k3,k4};
+
+    for(int i=1;i<3;i++)
+        for(int j=(i+1);j<4;j++)
+            if(i==2 && j==4)
+                break;
+            else
+            {
+                mVertices.push_back((corners[0]));
+                mVertices.push_back((corners[i]));
+                mVertices.push_back((corners[j]));
+            }
+
+    mVertices.push_back((corners[1]));
+    mVertices.push_back((corners[2]));
+    mVertices.push_back((corners[3]));
+
+    mMatrix.setToIdentity();
+}
+
 Trofee::Trofee(std::string name, float mx, float my, float mz)
 {
     typeName = "pickup";

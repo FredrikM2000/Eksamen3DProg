@@ -11,7 +11,7 @@ private:
     int d = 3;
 //    double p(double a, double b, double c, double d, double x);
 
-    gsl::Vector3D c[5];
+    gsl::Vector3D c[4];
 public:
     BezierCurve();
     ~BezierCurve();

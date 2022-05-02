@@ -7,7 +7,6 @@ BezierCurve::BezierCurve()
     c[1] = gsl::Vector3D(50,20,0);
     c[2] = gsl::Vector3D(100,0,0);
     c[3] = gsl::Vector3D(50,-20,0.f);
-    c[4] = gsl::Vector3D(0,0,0);
 
     double  dt=0.05;
      for (auto t=0.0; t<1.001; t+=dt)
@@ -27,8 +26,8 @@ BezierCurve::~BezierCurve()
 
 gsl::Vector3D BezierCurve::evaluateBezier(float t)
 {
-    gsl::Vector3D a[5];
-    for (int i=0; i<5; i++){
+    gsl::Vector3D a[4];
+    for (int i=0; i<4; i++){
         a[i] = c[i];
 
         for (int k=d; k>0; k--)

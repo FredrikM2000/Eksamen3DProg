@@ -32,9 +32,9 @@ RenderWindow::RenderWindow(const QSurfaceFormat &format, MainWindow *mainWindow)
         qDebug() << "Context could not be made - quitting this application";
     }
 
-     Point2D a{0, 0}, b{100, 0}, c{100, 100}, d{0, 100};
+     Point2D a{20, 70}, b{80, 70}, c{80, 30}, d{20, 30};
      mQuadTre = new QuadTree(a,b,c,d);
-     mQuadTre->subDivide(3);
+     mQuadTre->subDivide(1);
 
 
     //Make the gameloop timer:
@@ -161,6 +161,33 @@ void RenderWindow::init()
     cameraMesh->init(mMatrixUniform0);
     mVisualObjects.push_back(cameraMesh);// [4]
 
+    VisualObject *temp = new XYZ();
+    temp->init(mMatrixUniform0);
+    mVisualObjects.push_back(temp);// [5]
+
+    Trofee *trofee;
+    for(int i = 0; i < 10; i++)
+    {
+        trofee = new Trofee(true);
+        trofee->init(mMatrixUniform0);
+        trofee->mMatrix.translate(trofee->redTrophies[i].x,4,trofee->redTrophies[i].z);
+        trofee->mMatrix.scale(8);
+        mVisualObjects.push_back(trofee);
+//        mQuadTre->insert(trofee->getPosition2D(), trofee);
+    }
+
+    for(int i = 0; i < 10; i++)
+    {
+        trofee = new Trofee(false);
+        trofee->init(mMatrixUniform0);
+        trofee->mMatrix.translate(trofee->blueTrophies[i].x,4,trofee->blueTrophies[i].z);
+        trofee->mMatrix.scale(8);
+        mVisualObjects.push_back(trofee);
+//        mQuadTre->insert(trofee->getPosition2D(), trofee);
+    }
+//    temp = new Trofee(true, 0);
+//  temp.init
+//    mVisualobject.pushback.draw
 
     //**********Set up camera************
     mCurrentCamera = new Camera();
@@ -235,11 +262,21 @@ void RenderWindow::render()
 
     // Oppgave 5
     if(specMode)
+    {
         drawObject(0,4);
+        drawObject(0,5);// Oppgave 6
+    }
     else
         cameraMesh->mMatrix.setPosition(mCurrentCamera->getPosition().x, mCurrentCamera->getPosition().y, mCurrentCamera->getPosition().z);
 
 
+
+    for(int i = 6; i < 26; i++)
+        drawObject(0,i);
+
+
+
+    drawObject(0,0);// Quadtre
 
 
     //Calculate framerate before
