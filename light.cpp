@@ -15,12 +15,13 @@ Light::Light()
 //        3,0,2,
 //        0,3,1
 //    });
+    //Oppgave 3
+    obj = new ObjMesh("../Eksamen3DProg/Assets/obj_files/Sphere.obj", false, 0.9,1,0);
+    obj->init(mMatrixUniform);
 
 
-//    obj = new ObjMesh("../Eksamen/Assets/obj_files/Sphere.obj");
 
-
-//    mMatrix.setToIdentity();
+    mMatrix.setToIdentity();
 }
 
 void Light::init(GLint matrixUniform)
@@ -69,13 +70,13 @@ void Light::draw()
     glBindVertexArray( mVAO );
     glDrawElements(GL_TRIANGLES, mIndices.size(), GL_UNSIGNED_INT, nullptr);
     glBindVertexArray(0);
-//    if(obj)
-//        obj->draw();
+    if(obj)
+        obj->draw();
 }
 
 void Light::createObj()
 {
-    obj = new ObjMesh("../Eksamen/Assets/obj_files/Sphere.obj");
+//    obj = new ObjMesh("../Eksamen/Assets/obj_files/Sphere.obj");
 }
 
 

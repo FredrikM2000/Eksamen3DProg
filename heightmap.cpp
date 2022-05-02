@@ -6,7 +6,7 @@
 Heightmap::Heightmap()
 {
     maxHeight = terrainRadius/5;
-    m_localBuffer = stbi_load("../Eksamen/Assets/EksamenHeightmap.bmp", &m_width, &m_depth, (int*)NULL, 1);
+    m_localBuffer = stbi_load("../Eksamen3DProg/Assets/EksamenHeightmap.bmp", &m_width, &m_depth, (int*)NULL, 1);
     setPlane();
 }
 

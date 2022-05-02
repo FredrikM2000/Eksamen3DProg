@@ -1,15 +1,15 @@
 #include "objmesh.h"
 
-ObjMesh::ObjMesh(std::string filename)
+ObjMesh::ObjMesh(std::string filename, bool useNormals, float r, float g, float b)
 {
-    readFile(filename);
+    readFile(filename, useNormals, r, g, b);
     mMatrix.setToIdentity();
 }
 
 ObjMesh::~ObjMesh(){}
 
 
-void ObjMesh::readFile(std::string filename)
+void ObjMesh::readFile(std::string filename, bool useNormals, float r, float g, float b)
 {
     std::ifstream fileIn;
     fileIn.open(filename);
@@ -66,16 +66,23 @@ void ObjMesh::readFile(std::string filename)
         }
         if(oneWord == "vn")
         {
-            gsl::Vector3D tempNormal;
-            sStream >> oneWord;
-            tempNormal.x = std::stof(oneWord);
-            sStream >> oneWord;
-            tempNormal.y = std::stof(oneWord);
-            sStream >> oneWord;
-            tempNormal.z = std::stof(oneWord);
+            if(!useNormals)
+            {
+                gsl::Vector3D colors{r,g,b};
+                tempNormals.push_back(colors);
+            }
+            else{
+                gsl::Vector3D tempNormal;
+                sStream >> oneWord;
+                tempNormal.x = std::stof(oneWord);
+                sStream >> oneWord;
+                tempNormal.y = std::stof(oneWord);
+                sStream >> oneWord;
+                tempNormal.z = std::stof(oneWord);
 
-            tempNormals.push_back(tempNormal);
-            continue;
+                tempNormals.push_back(tempNormal);
+                continue;
+            }
         }
         if(oneWord == "f")
         {

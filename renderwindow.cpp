@@ -158,10 +158,7 @@ void RenderWindow::init()
     mVisualObjects.push_back(mia);// [3]
     mMap.insert(std::pair<std::string, VisualObject*>{"mia", mia});
 
-//    VisualObject* temp = new ObjMesh("../Eksamen3DProg/Assets/obj_files/Brazier.obj");
-//    temp->init(mMatrixUniform0);
-// //    temp->mMatrix.scale(5);
-//    mVisualObjects.push_back(temp);// [4]
+
 
     //**********Set up camera************
     mCurrentCamera = new Camera();
@@ -192,28 +189,30 @@ void RenderWindow::render()
 
     checkForGLerrors();
 
-    {
-        glUseProgram(mShaderProgram[2]->getProgram() );
-        // Heightmap
-        glUniformMatrix4fv(vMatrixUniform2,1,GL_TRUE, mCurrentCamera->mViewMatrix.constData());
-        glUniformMatrix4fv(pMatrixUniform2,1,GL_TRUE, mCurrentCamera->mProjectionMatrix.constData());
-        glUniformMatrix4fv(mMatrixUniform2,1,GL_TRUE, mVisualObjects[1]->mMatrix.constData());
-        glUniform3f(mLightPositionUniform, mLight->mMatrix.getPosition().x, mLight->mMatrix.getPosition().y, mLight->mMatrix.getPosition().z);
-        glUniform3f(mCameraPositionUniform, mCurrentCamera->position().x, mCurrentCamera->position().y, mCurrentCamera->position().z);
-        glUniform3f(mLightColorUniform, mLight->mLightColor.x, mLight->mLightColor.y, mLight->mLightColor.y);
-        glUniform1f(mSpecularStrengthUniform,mLight->mSpecularStrength);
-        //texture
-        glUniform1i(mTextureUniform2, 1);
 
-        mVisualObjects[1]->draw();
+    //Oppgave 2
+    glUseProgram(mShaderProgram[2]->getProgram() );
+    // Heightmap
+    glUniformMatrix4fv(vMatrixUniform2,1,GL_TRUE, mCurrentCamera->mViewMatrix.constData());
+    glUniformMatrix4fv(pMatrixUniform2,1,GL_TRUE, mCurrentCamera->mProjectionMatrix.constData());
+    glUniformMatrix4fv(mMatrixUniform2,1,GL_TRUE, mVisualObjects[1]->mMatrix.constData());
+    glUniform3f(mLightPositionUniform, mLight->mMatrix.getPosition().x, mLight->mMatrix.getPosition().y, mLight->mMatrix.getPosition().z);
+    glUniform3f(mCameraPositionUniform, mCurrentCamera->position().x, mCurrentCamera->position().y, mCurrentCamera->position().z);
+    glUniform3f(mLightColorUniform, mLight->mLightColor.x, mLight->mLightColor.y, mLight->mLightColor.y);
+    glUniform1f(mSpecularStrengthUniform,mLight->mSpecularStrength);
+    //texture
+    glUniform1i(mTextureUniform2, 2);
 
-        drawObject(0, 2);//Lys
-        mLight->mMatrix.translateY(0.03);
-        mLight->mMatrix.rotateZ(0.2);
+    mVisualObjects[1]->draw();
 
-//        drawObject(0,4);
+    //Oppgave 3
+    drawObject(0, 2);//Lys
+    mLight->mMatrix.translateY(0.03);
+    mLight->mMatrix.rotateZ(0.2);
 
-    }
+//    drawObject(0,4);
+
+
 
     //Calculate framerate before
     // checkForGLerrors() because that call takes a long time
