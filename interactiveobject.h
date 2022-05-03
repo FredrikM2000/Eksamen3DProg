@@ -18,7 +18,6 @@ public:
     void readFile();
     void collision(VisualObject* gameObject);
     void createCollisionBox(bool draw);
-
 private:
    TriangleSurface* curve;
    float mx, my, mz; // posisjon
@@ -28,7 +27,6 @@ private:
    CollisionAABB *collider;
 
    bool bDrawBox;
-
 };
 
 #endif // INTERACTIVEOBJECT_H

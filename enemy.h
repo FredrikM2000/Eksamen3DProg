@@ -18,15 +18,21 @@ public:
     void collision(VisualObject* gameObject);
     void construct();
     void createCollisionBox(bool draw);
+
+    //Opgave 13
+    int time{1};
 private:
     float mx{0}, dt{0.02};
-    bool hit{false};
-    Trofee trofee;
-    int currentEnemy{0};
     float speed = 0.1;
+
+    bool hit{false};
+    bool bDrawBox{false};
+
+    int currentEnemy{0};
+
+    Trofee trofee;
     CollisionAABB *collider;
     ObjMesh* mesh;
-    bool bDrawBox{false};
 };
 
 #endif // ENEMY_H

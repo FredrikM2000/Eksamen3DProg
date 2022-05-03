@@ -172,6 +172,7 @@ private:
 
     bool specMode{false};// Spectator mode
     bool poly{false};
+    int time{1};
 
     void drawObject(int shadeNum, int objNum);
     void drawPhong(int objNum);

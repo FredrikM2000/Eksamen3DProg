@@ -89,8 +89,8 @@ void Enemy::moveTowards() //Oppgave 9
 //    qDebug() << currentEnemy;
 
     distance.normalize();
-    mMatrix.translateX(distance.x * speed);
-    mMatrix.translateZ(distance.z * speed);
+    mMatrix.translateX(distance.x * speed * time);
+    mMatrix.translateZ(distance.z * speed * time);
 }
 
 void Enemy::collision(VisualObject* gameObject)//Oppgave 9

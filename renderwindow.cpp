@@ -249,8 +249,9 @@ void RenderWindow::render()
 
     //Oppgave 3
     drawObject(0, 2);//Lys
-    mLight->mMatrix.translateY(0.03);
-    mLight->mMatrix.rotateZ(0.2);
+    //Oppgave 13
+    mLight->mMatrix.translateY(0.03 * time);
+    mLight->mMatrix.rotateZ(0.2 * time);
 
     //Oppgave 4
     glUseProgram(mShaderProgram[2]->getProgram() );
@@ -282,6 +283,8 @@ void RenderWindow::render()
     for(int i = 6; i < 26; i++)
         drawObject(0,i);
 
+    //Oppgave 13
+    enemy->time = time;
     //Oppgave 9
     drawObject(0,26);// enemy
     float enemyY = mHeightmap->SetYCoord(mMap["enemy"]->mMatrix.getPosition().getX(), mMap["enemy"]->mMatrix.getPosition().getZ());
@@ -565,15 +568,14 @@ void RenderWindow::keyPressEvent(QKeyEvent *event)
         if(specMode)
         {
             specMode = false;
-//            mCurrentCamera->pitch(mCurrentCamera->getPitch() + 40);
-//            mCurrentCamera->yaw(mCurrentCamera->getYaw() - 5);
-
+            time = 1;
             mCurrentCamera->switchView();
             glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
             poly = false;
         }
         else if(!specMode){
             specMode = true;
+            time = 0;
             mCurrentCamera->switchView();
         }
     }
