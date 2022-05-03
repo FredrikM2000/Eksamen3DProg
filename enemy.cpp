@@ -3,14 +3,8 @@
 Enemy::Enemy()
 {
     typeName = "enemy";
-    mVertices.push_back(Vertex{0.f,0.f,0.f,         1.f,0.f,0.f,     0.f,0.f});
-    mVertices.push_back(Vertex{1.f, 0.f, 0.f,       1.f,0.f,0.f,     1.f,0.f});
-    mVertices.push_back(Vertex{0.f, 1.f, 0.f,       1.f,0.f,0.f,        0.f,1.f});
-
-    mVertices.push_back(Vertex{1.f, 0.f, 0.f,       1.f,0.f,0.f,     1.f,0.f});
-    mVertices.push_back(Vertex{0.f, 1.f, 0.f,       1.f,0.f,0.f,        0.f,1.f});
-    mVertices.push_back(Vertex{1.f, 1.f, 0.f,       1.f,0.f,0.f,     1.f,1.f});
-
+    mesh = new ObjMesh("../Eksamen3DProg/Assets/obj_files/Enemy.obj", false, 0,1,0);
+    mesh->init(mMatrixUniform);
 
     mMatrix.setToIdentity();
 }
@@ -45,15 +39,30 @@ void Enemy::init(GLint matrixUniform)
 
         glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE,  sizeof(Vertex),  reinterpret_cast<GLvoid*>(3 * sizeof(GLfloat)) );
         glEnableVertexAttribArray(1);
+        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE,  sizeof(Vertex),  reinterpret_cast<GLvoid*>(6 * sizeof(GLfloat)) );
+        glEnableVertexAttribArray(2);
+
+        glGenBuffers ( 1, &mEAB );
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mEAB);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, mIndices.size()*sizeof(GLuint), mIndices.data(), GL_STATIC_DRAW);
+
         glBindVertexArray(0);
 }
 
 void Enemy::draw()
 {
     moveTowards();
-    glBindVertexArray( mVAO );
-//    glUniformMatrix4fv( mMatrixUniform, 1, GL_FALSE, mMatrix.constData());
-    glDrawArrays(GL_TRIANGLES, 0, mVertices.size());
+
+    if(mesh)
+        mesh->draw();
+    else
+    {
+        glBindVertexArray(mVAO);
+        glDrawElements(GL_TRIANGLES, mIndices.size(), GL_UNSIGNED_INT, nullptr);
+        glBindVertexArray(0);
+    }
+    if(bDrawBox)
+        collider->draw();
 }
 
 void Enemy::move()
@@ -69,18 +78,40 @@ void Enemy::move()
 
 void Enemy::moveTowards() //Oppgave 9
 {
+    if(currentEnemy > 9)
+        return;
     gsl::Vector2D trophyXZ;
     trophyXZ.x = trofee.blueTrophies[currentEnemy].x;
     trophyXZ.z = trofee.blueTrophies[currentEnemy].z;
     gsl::Vector2D pos = this->mMatrix.getPosition2D();
-    gsl::Vector2D distance = {abs(pos.x - trophyXZ.x), abs(pos.z - trophyXZ.z)};
+    gsl::Vector2D distance = {trophyXZ.x - pos.x, trophyXZ.z - pos.z};
+
+//    qDebug() << currentEnemy;
 
     distance.normalize();
     mMatrix.translateX(distance.x * speed);
     mMatrix.translateZ(distance.z * speed);
 }
 
+void Enemy::collision(VisualObject* gameObject)//Oppgave 9
+{
+    if(gameObject->m_name == "blue")
+        if(collider->isColliding(gameObject, this->mMatrix.getPosition2D()))
+        {
+            if(gameObject->bDraw){
+                currentEnemy++;// Denne ble noen ganger kjørt flere ganger for et trofee, så currentEnemy ble høyere enn det det burde være
+                gameObject->bDraw = false;
+            }
+        }
 
+}
+
+void Enemy::createCollisionBox(bool draw)
+{
+    collider = new CollisionAABB (this->mesh);
+    collider->init(mMatrixUniform);
+    bDrawBox = draw;
+}
 
 
 

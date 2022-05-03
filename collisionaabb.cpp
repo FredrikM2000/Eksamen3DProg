@@ -87,6 +87,7 @@ void CollisionAABB::draw()
 
 std::vector<float> CollisionAABB::findValues(VisualObject *obj, gsl::Vector2D position)
 {
+    // Oppgave 8
     std::vector<Vertex> vertices = obj->getVertices();
     float minX = vertices[0].m_xyz[0];
     float maxX = vertices[0].m_xyz[0];

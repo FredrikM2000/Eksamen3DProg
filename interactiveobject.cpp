@@ -59,13 +59,9 @@ void InteractiveObject::draw()
     if(mesh)
         mesh->draw();
     else{
-    glBindVertexArray( mVAO );
- //    glUniformMatrix4fv( mMatrixUniform, 1, GL_FALSE, mMatrix.constData());
-    glDrawArrays(GL_TRIANGLES, 0, mVertices.size());
-
-    glBindVertexArray(mVAO);
-    glDrawElements(GL_TRIANGLES, mIndices.size(), GL_UNSIGNED_INT, nullptr);
-    glBindVertexArray(0);
+       glBindVertexArray(mVAO);
+       glDrawElements(GL_TRIANGLES, mIndices.size(), GL_UNSIGNED_INT, nullptr);
+       glBindVertexArray(0);
     }
 
     if(bDrawBox)
@@ -94,11 +90,9 @@ void InteractiveObject::readFile()
 
 void InteractiveObject::collision(VisualObject* gameObject)
 {
-    if(collider->isColliding(gameObject, this->mMatrix.getPosition2D()))
-    {
-        if(gameObject->m_name == "red")
+    if(gameObject->m_name == "red")
+        if(collider->isColliding(gameObject, this->mMatrix.getPosition2D()))
             gameObject->bDraw = false;
-    }
 
 }
 

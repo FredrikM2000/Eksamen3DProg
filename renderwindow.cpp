@@ -188,7 +188,10 @@ void RenderWindow::init()
 
     enemy = new Enemy();
     enemy->init(mMatrixUniform0);
+    enemy->createCollisionBox(false);
+    enemy->mMatrix.setPosition(60,0,70);
     mVisualObjects.push_back(enemy);// [26]
+    mMap.insert(std::pair<std::string, VisualObject*>{"enemy", enemy});
 
     temp = new CollisionAABB(trofee);
     temp->init(mMatrixUniform0);
@@ -279,8 +282,16 @@ void RenderWindow::render()
     for(int i = 6; i < 26; i++)
         drawObject(0,i);
 
-
+    //Oppgave 9
     drawObject(0,26);// enemy
+    float enemyY = mHeightmap->SetYCoord(mMap["enemy"]->mMatrix.getPosition().getX(), mMap["enemy"]->mMatrix.getPosition().getZ());
+    mMap["enemy"]->mMatrix.setPositionY(enemyY + 1);
+
+    auto posisjon = mMap["enemy"]->getPosition2D();
+    auto subtre = mQuadTre->find(posisjon);
+    for (auto it=subtre->m_sub_objects.begin();it!=subtre->m_sub_objects.end();it++)
+        if((*it)->typeName == "pickup")
+            enemy->collision(*it);
 
 //    drawObject(0,27);// trofee collision
 
@@ -519,10 +530,7 @@ void RenderWindow::handleInput()
     auto subtre = mQuadTre->find(posisjon);
     for (auto it=subtre->m_sub_objects.begin();it!=subtre->m_sub_objects.end();it++)
         if((*it)->typeName == "pickup")
-        {
-//            qDebug() << (*it)->mMatrix.getPosition();
             mia->collision(*it);
-        }
 }
 
 
