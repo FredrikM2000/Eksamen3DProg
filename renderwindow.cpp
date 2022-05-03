@@ -143,7 +143,6 @@ void RenderWindow::init()
     //Oppgave 3
     mLight = new Light();
     mLight->init(mMatrixUniform0);
-//    mLight->createObj();
     mLight->mMatrix.translate(5.f, 20.f, -2.f);
     mLight->mMatrix.scale(5.f);
     mVisualObjects.push_back(mLight);// [2]
@@ -151,7 +150,7 @@ void RenderWindow::init()
     //Oppgave 4
     mia = new InteractiveObject();
     mia->init(mMatrixUniform2);
-    mia->createCollisionBox();
+    mia->createCollisionBox(false);
     mia->mMatrix.setPosition(50,0,70);
     mVisualObjects.push_back(mia);// [3]
     mMap.insert(std::pair<std::string, VisualObject*>{"mia", mia});
@@ -165,15 +164,15 @@ void RenderWindow::init()
     temp->init(mMatrixUniform0);
     mVisualObjects.push_back(temp);// [5]
 
-    Trofee *trofee;
     for(int i = 0; i < 10; i++)
     {
         trofee = new Trofee(true);
         trofee->init(mMatrixUniform0);
         trofee->mMatrix.translate(trofee->redTrophies[i].x,4,trofee->redTrophies[i].z);
         trofee->mMatrix.scale(8);
-        mVisualObjects.push_back(trofee);
-//        mQuadTre->insert(trofee->getPosition2D(), trofee);
+        trofee->mScaled = 8;
+        mVisualObjects.push_back(trofee);// [6 - 15]
+        mQuadTre->insert(trofee->getPosition2D(), trofee);
     }
 
     for(int i = 0; i < 10; i++)
@@ -182,12 +181,18 @@ void RenderWindow::init()
         trofee->init(mMatrixUniform0);
         trofee->mMatrix.translate(trofee->blueTrophies[i].x,4,trofee->blueTrophies[i].z);
         trofee->mMatrix.scale(8);
-        mVisualObjects.push_back(trofee);
-//        mQuadTre->insert(trofee->getPosition2D(), trofee);
+        trofee->mScaled = 8;
+        mVisualObjects.push_back(trofee);// [16 - 25]
+        mQuadTre->insert(trofee->getPosition2D(), trofee);
     }
-//    temp = new Trofee(true, 0);
-//  temp.init
-//    mVisualobject.pushback.draw
+
+    enemy = new Enemy();
+    enemy->init(mMatrixUniform0);
+    mVisualObjects.push_back(enemy);// [26]
+
+    temp = new CollisionAABB(trofee);
+    temp->init(mMatrixUniform0);
+    mVisualObjects.push_back(temp);// [27]
 
     //**********Set up camera************
     mCurrentCamera = new Camera();
@@ -275,6 +280,9 @@ void RenderWindow::render()
         drawObject(0,i);
 
 
+    drawObject(0,26);// enemy
+
+//    drawObject(0,27);// trofee collision
 
     drawObject(0,0);// Quadtre
 
@@ -510,7 +518,7 @@ void RenderWindow::handleInput()
     auto posisjon = mMap["mia"]->getPosition2D();
     auto subtre = mQuadTre->find(posisjon);
     for (auto it=subtre->m_sub_objects.begin();it!=subtre->m_sub_objects.end();it++)
-        if((*it)->typeName == "enemy" || (*it)->typeName == "pickup")
+        if((*it)->typeName == "pickup")
         {
 //            qDebug() << (*it)->mMatrix.getPosition();
             mia->collision(*it);

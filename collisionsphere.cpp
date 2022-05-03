@@ -80,6 +80,7 @@ bool CollisionSphere::isColliding(VisualObject *other, gsl::Vector2D playerPos)
 
     float distance = sqrt(pow(distX,2) + pow(distZ,2));
 
+    qDebug() << other_values;
     if (distance < (this_values[2] + other_values[2]))
         return true;
     return false;
@@ -89,7 +90,7 @@ std::vector<float> CollisionSphere::findValues(VisualObject *obj)
 {
     std::vector<float> MinMax = findMinMax(obj);
 
-    float radius = findRadius(MinMax[0], MinMax[0], MinMax[0], MinMax[0]);
+    float radius = findRadius(MinMax[0], MinMax[1], MinMax[2], MinMax[3]);
 
     std::vector<float> values = {MinMax[0], MinMax[1], MinMax[2], MinMax[3], radius};
     gsl::Vector2D punkt = gsl::Vector2D(MinMax[0] + radius + obj->mMatrix.getPosition2D().x, MinMax[2] + radius + obj->mMatrix.getPosition2D().z);

@@ -31,6 +31,7 @@ public:
    bool bDraw{true};
 
    gsl::Matrix4x4 mMatrix;
+   float mScaled{1};
 
    std::vector<Vertex> getVertices();
 

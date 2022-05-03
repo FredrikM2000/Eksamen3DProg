@@ -35,6 +35,7 @@ Trofee::Trofee(bool red)
     Vertex k1, k2, k3, k4;
     if(red)
     {
+        m_name = "red";
         k1 = Vertex(0,-0.3,-0.1732,1,0,0);
         k2 = Vertex(0.15,-0.3,0.0866,1,0,0);
         k3 = Vertex(-0.15,-0.3,0.0866,1,0,0);
@@ -42,6 +43,7 @@ Trofee::Trofee(bool red)
     }
     else
     {
+        m_name = "blue";
         k1 = Vertex(0,-0.3,-0.1732,0,0,1);
         k2 = Vertex(0.15,-0.3,0.0866,0,0,1);
         k3 = Vertex(-0.15,-0.3,0.0866,0,0,1);

@@ -12,9 +12,9 @@ public:
     ~CollisionAABB();
     void init(GLint matrixUniform) override;
     void draw() override;
-    std::vector<float> findValues(std::vector<Vertex> vertices);
+    std::vector<float> findValues(VisualObject *obj, gsl::Vector2D position = 0);
+    std::vector<float> fixScale(float a, float b, float c, float d, float objScale);
     bool isColliding(VisualObject *other, gsl::Vector2D player);
-//    void createBox(std::vector<Vertex> object);
 };
 
 #endif // COLLISIONBOX_H

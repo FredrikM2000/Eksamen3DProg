@@ -300,7 +300,6 @@ void Matrix4x4::scale(Vector3D s)
 
 void Matrix4x4::scale(GLfloat uniformScale)
 {
-    scaled = uniformScale;
     scale(uniformScale, uniformScale, uniformScale);
 }
 

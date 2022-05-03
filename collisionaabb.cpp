@@ -3,10 +3,12 @@
 CollisionAABB::CollisionAABB()
 {
 
-    mVertices.push_back(Vertex{2.85,0.0f,1.0866});
-    mVertices.push_back(Vertex{2.85,10.0,1.0866});
+    mVertices.push_back(Vertex{0,0,0});
+    mVertices.push_back(Vertex{1,0,0});
+    mVertices.push_back(Vertex{1,0,1});
+    mVertices.push_back(Vertex{0,0,1});
 
-    mIndices.insert(mIndices.end(), { 0,1 });
+    mIndices.insert(mIndices.end(), { 0,1, 1,2, 2,3, 3,0});
 
     mMatrix.setToIdentity();
 }
@@ -25,40 +27,12 @@ CollisionAABB::CollisionAABB(std::vector<Vertex> object)
 
 CollisionAABB::CollisionAABB(VisualObject *obj)
 {
-    std::vector<float> values = findValues(obj->getVertices());
+    std::vector<float> values = findValues(obj);
 
-//    float lengthx = (values[1] - values[0])/2;
-//    float lengthz = (values[3] - values[2])/2;
-
-//    float minX = values[0] - (lengthx * 3);//temporary
-//    float maxX = values[1] + (lengthx * 3);
-//    float minZ = values[2] - (lengthz * 3);
-//    float maxZ = values[3] + (lengthz * 3);
-
-//    float minX = values[0] - (lengthx * obj->mMatrix.scaled);
-//    float maxX = values[1] + (lengthx * obj->mMatrix.scaled);
-//    float minZ = values[2] - (lengthz * obj->mMatrix.scaled);
-//    float maxZ = values[3] + (lengthz * obj->mMatrix.scaled);
-
-//    minX += obj->mMatrix.getPosition().x;
-//    maxX += obj->mMatrix.getPosition().x;
-//    minZ += obj->mMatrix.getPosition().z;
-//    maxZ += obj->mMatrix.getPosition().z;
-    values[0] += obj->mMatrix.getPosition().x;
-    values[1] += obj->mMatrix.getPosition().x;
-    values[2] += obj->mMatrix.getPosition().z;
-    values[3] += obj->mMatrix.getPosition().z;
-
-//    obj->mMatrix.scaled;
-
-//    mVertices.push_back(Vertex{minX,0,minZ,   0,0,1});
-//    mVertices.push_back(Vertex{maxX,0,minZ,   0,0,1});
-//    mVertices.push_back(Vertex{maxX,0,maxZ,   0,0,1});
-//    mVertices.push_back(Vertex{minX,0,maxZ,   0,0,1});
-    mVertices.push_back(Vertex{values[0],0,values[2],   0,0,1});
-    mVertices.push_back(Vertex{values[1],0,values[2],   0,0,1});
-    mVertices.push_back(Vertex{values[1],0,values[3],   0,0,1});
-    mVertices.push_back(Vertex{values[0],0,values[3],   0,0,1});
+    mVertices.push_back(Vertex{values[0],1,values[2],   0,0,1});
+    mVertices.push_back(Vertex{values[1],1,values[2],   0,0,1});
+    mVertices.push_back(Vertex{values[1],1,values[3],   0,0,1});
+    mVertices.push_back(Vertex{values[0],1,values[3],   0,0,1});
 
     mIndices.insert(mIndices.end(), {0,1, 1,2, 2,3, 3,0});
     mMatrix.setToIdentity();
@@ -111,8 +85,9 @@ void CollisionAABB::draw()
     glBindVertexArray(0);
 }
 
-std::vector<float> CollisionAABB::findValues(std::vector<Vertex> vertices)
+std::vector<float> CollisionAABB::findValues(VisualObject *obj, gsl::Vector2D position)
 {
+    std::vector<Vertex> vertices = obj->getVertices();
     float minX = vertices[0].m_xyz[0];
     float maxX = vertices[0].m_xyz[0];
     float minZ = vertices[0].m_xyz[2];
@@ -130,37 +105,44 @@ std::vector<float> CollisionAABB::findValues(std::vector<Vertex> vertices)
             maxZ = vertices[i].m_xyz[2];
     }
 
+    //Sett riktig posisjon
+    if(position.x == 0 && position.z == 0)
+    {
+        minX += obj->mMatrix.getPosition().x;
+        maxX += obj->mMatrix.getPosition().x;
+        minZ += obj->mMatrix.getPosition().z;
+        maxZ += obj->mMatrix.getPosition().z;
+    }
+    else
+    {
+        minX += position.x;
+        maxX += position.x;
+        minZ += position.z;
+        maxZ += position.z;
+    }
 
-    return std::vector<float> {minX, maxX, minZ, maxZ};
+    std::vector<float> returns = fixScale(minX, maxX, minZ, maxZ, obj->mScaled);
+
+    return std::vector<float> {returns};
+}
+
+std::vector<float> CollisionAABB::fixScale(float a, float b, float c, float d, float objScale)
+{
+    float radiusX = (b - a)/2;
+    float radiusZ = (d - c)/2;
+
+    a -= (radiusX * objScale) - radiusX;
+    b += (radiusX * objScale) - radiusX;
+    c -= (radiusZ * objScale) - radiusZ;
+    d += (radiusZ * objScale) - radiusZ;
+
+    return std::vector<float> {a, b, c, d};
 }
 
 bool CollisionAABB::isColliding(VisualObject *other, gsl::Vector2D playerPos)
 {
-    std::vector<float> this_values = findValues(this->mVertices);
-    std::vector<float> other_values = findValues(other->getVertices());
-
-
-//    qDebug() << other->mMatrix.getPosition();
-//    qDebug() << playerPos.x << playerPos.z;
-
-    this_values[0] += playerPos.x;
-    this_values[1] += playerPos.x;
-    this_values[2] += playerPos.z;
-    this_values[3] += playerPos.z;
-
-    //                                              Temporary
-    other_values[0] += other->mMatrix.getPosition().x/* - 0.45'*/;
-    other_values[1] += other->mMatrix.getPosition().x/* + 0.45'*/;
-    other_values[2] += other->mMatrix.getPosition().z/* - 0.39'*/;
-    other_values[3] += other->mMatrix.getPosition().z/* + 0.39'*/;
-
-
-//    qDebug() << "PminX" << this_values[0] << "PmaxX" << this_values[1]
-//             << "PminZ" << this_values[2] << "PmaxZ" << this_values[3] << "||"
-//             << "OminX" << other_values[0] << "OmaxX" << other_values[1]
-//             << "OminZ" << other_values[2] << "OmaxZ" << other_values[3] << '\n';
-
-
+    std::vector<float> this_values = findValues(this, playerPos);
+    std::vector<float> other_values = findValues(other);
 
     if(this_values[0] < other_values[1] && this_values[1] > other_values[0]
     && this_values[2] < other_values[3] && this_values[3] > other_values[2])
@@ -170,10 +152,6 @@ bool CollisionAABB::isColliding(VisualObject *other, gsl::Vector2D playerPos)
     return false;
 }
 
-//void CollisionBox::createBox()
-//{
-
-//}
 
 
 

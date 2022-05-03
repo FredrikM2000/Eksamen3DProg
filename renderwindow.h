@@ -59,11 +59,7 @@ public:
 
     void exposeEvent(QExposeEvent *) override;  //gets called when app is shown and resized
 
-    class Light *mLight{nullptr};
-    class Enemy *mEnemy0{nullptr};
-    class Enemy *mEnemy1{nullptr};
-    class Enemy *mEnemy2{nullptr};
-    class Heightmap *mHeightmap{nullptr};
+
 
 
     bool mRotate{true};     //Check if triangle should rotate
@@ -81,7 +77,8 @@ private:
 //  QuadTre* mQuadTre;
     Camera mCamera;
 
-    //VisualObject* mia;
+    Light *mLight;
+    Heightmap *mHeightmap;
     BezierCurve* bez;
     OctahedronBall* ball;
     Disc* disc;
@@ -92,14 +89,9 @@ private:
     VisualCurve* curve;
     VisualCurve* curve1;
     ObjMesh* cameraMesh;
+    Enemy* enemy;
+    Trofee* trofee;
 
-    Trofee* trof0;
-    Trofee* trof1;
-    Trofee* trof2;
-    Trofee* trof3;
-    Trofee* trof4;
-    Trofee* trof5;
-    Trofee* trof6;
 
 
     void init();            //initialize things we need before rendering

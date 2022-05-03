@@ -50,6 +50,7 @@ void Enemy::init(GLint matrixUniform)
 
 void Enemy::draw()
 {
+    moveTowards();
     glBindVertexArray( mVAO );
 //    glUniformMatrix4fv( mMatrixUniform, 1, GL_FALSE, mMatrix.constData());
     glDrawArrays(GL_TRIANGLES, 0, mVertices.size());
@@ -65,3 +66,23 @@ void Enemy::move()
 
 
 }
+
+void Enemy::moveTowards() //Oppgave 9
+{
+    gsl::Vector2D trophyXZ;
+    trophyXZ.x = trofee.blueTrophies[currentEnemy].x;
+    trophyXZ.z = trofee.blueTrophies[currentEnemy].z;
+    gsl::Vector2D pos = this->mMatrix.getPosition2D();
+    gsl::Vector2D distance = {abs(pos.x - trophyXZ.x), abs(pos.z - trophyXZ.z)};
+
+    distance.normalize();
+    mMatrix.translateX(distance.x * speed);
+    mMatrix.translateZ(distance.z * speed);
+}
+
+
+
+
+
+
+
