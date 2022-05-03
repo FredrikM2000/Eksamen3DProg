@@ -78,11 +78,11 @@ void Enemy::move()
 
 void Enemy::moveTowards() //Oppgave 9
 {
-    if(currentEnemy > 9)
+    if(collectedTrophies > 9)
         return;
     gsl::Vector2D trophyXZ;
-    trophyXZ.x = trofee.blueTrophies[currentEnemy].x;
-    trophyXZ.z = trofee.blueTrophies[currentEnemy].z;
+    trophyXZ.x = trofee.blueTrophies[collectedTrophies].x;
+    trophyXZ.z = trofee.blueTrophies[collectedTrophies].z;
     gsl::Vector2D pos = this->mMatrix.getPosition2D();
     gsl::Vector2D distance = {trophyXZ.x - pos.x, trophyXZ.z - pos.z};
 
@@ -99,7 +99,7 @@ void Enemy::collision(VisualObject* gameObject)//Oppgave 9
         if(collider->isColliding(gameObject, this->mMatrix.getPosition2D()))
         {
             if(gameObject->bDraw){
-                currentEnemy++;// Denne ble noen ganger kjørt flere ganger for et trofee, så currentEnemy ble høyere enn det det burde være
+                collectedTrophies++;// Denne ble noen ganger kjørt flere ganger for et trofee, så currentEnemy ble høyere enn det det burde være
                 gameObject->bDraw = false;
             }
         }

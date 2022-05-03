@@ -196,6 +196,8 @@ private:
     void drawObject(int shadeNum, int objNum);
     void drawPhong(int objNum);
 
+    void winCondition();
+
 protected:
     //The QWindow that we inherit from have these functions to capture
     // - mouse and keyboard.

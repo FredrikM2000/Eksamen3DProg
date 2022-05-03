@@ -66,6 +66,7 @@ void InteractiveObject::draw()
 
     if(bDrawBox)
         collider->draw();
+
 }
 
 void InteractiveObject::readFile()
@@ -107,7 +108,12 @@ void InteractiveObject::collision(VisualObject* gameObject)
     //Oppgave 8
     if(gameObject->m_name == "red")
         if(collider->isColliding(gameObject, playerPos))
-            gameObject->bDraw = false;
+            if(gameObject->bDraw)
+            {
+                gameObject->bDraw = false;
+                collectedTrophies++;
+            }
+
 }
 
 void InteractiveObject::createCollisionBox(bool draw)

@@ -20,6 +20,7 @@ public:
     void createCollisionBox(bool draw);
 
     float speed = 0.15;
+    int collectedTrophies{0};
 private:
    TriangleSurface* curve;
    float mx, my, mz; // posisjon

@@ -21,6 +21,7 @@ public:
 
     //Opgave 13
     int time{1};
+    int collectedTrophies{0};
 private:
     float mx{0}, dt{0.02};
     float speed = 0.1;
@@ -28,7 +29,6 @@ private:
     bool hit{false};
     bool bDrawBox{false};
 
-    int currentEnemy{0};
 
     Trofee trofee;
     CollisionAABB *collider;

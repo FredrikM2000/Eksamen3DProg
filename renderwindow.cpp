@@ -238,7 +238,7 @@ void RenderWindow::init()
 void RenderWindow::render()
 {
     handleInput();
-
+    winCondition();
 //    mCurrentCamera->lookAt(10,10,10);
     mCurrentCamera->update();
 
@@ -419,6 +419,20 @@ void RenderWindow::drawPhong(int objNum)
     glUniform1i(mTextureUniform2, 1);
 
     mVisualObjects[objNum]->draw();
+}
+
+void RenderWindow::winCondition()
+{// Oppgave 12
+    if(mia->collectedTrophies == 10)
+    {
+        qDebug() << "You win";
+        time = 0;
+    }
+    if(enemy->collectedTrophies == 10)
+    {
+        qDebug() << "You lose";
+        time = 0;
+    }
 }
 
 
