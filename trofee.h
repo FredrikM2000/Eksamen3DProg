@@ -28,16 +28,16 @@ public:
                                            {53,31},
                                            {74,64}};
 
-    std::vector<gsl::Vector2D> blueTrophies{{58,64},
+    std::vector<gsl::Vector2D> blueTrophies{{50,67},
                                             {40,57},
                                             {24,52},
                                             {35,35},
                                             {41,39},
-                                            {40,47},
-                                            {60,42},
+                                            {48,49},
+                                            {60,44},
                                             {54,35},
                                             {77,42},
-                                            {55,53}};
+                                            {62,56}};
 };
 
 #endif // TROFEE_H

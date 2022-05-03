@@ -109,12 +109,15 @@ void RenderWindow::init()
     mShaderProgram[1] = new Shader("../Eksamen3DProg/textureshader.vert", "../Eksamen3DProg/textureshader.frag");
     mLogger->logText("Texture shader program id: " + std::to_string(mShaderProgram[1]->getProgram()));
     mShaderProgram[2] = new Shader("../Eksamen3DProg/phongvertex.vert", "../Eksamen3DProg/phongfragment.frag");
-    mLogger->logText("Texture shader program id: " + std::to_string(mShaderProgram[2]->getProgram()));
+    mLogger->logText("Phong shader program id: " + std::to_string(mShaderProgram[2]->getProgram()));
+    mShaderProgram[3] = new Shader("../Eksamen3DProg/phong_wo_texture.vert", "../Eksamen3DProg/phong_wo_texture.frag");
+    mLogger->logText("Phong shader program id: " + std::to_string(mShaderProgram[3]->getProgram()));
     checkForGLerrors();
 
     setupPlainShader(0);
     setupTextureShader(1);
     setupPhongShader(2);
+    setupPhongWoTextureShader(3);
 
 //*************Texture stuff**************
 
@@ -197,6 +200,24 @@ void RenderWindow::init()
     temp->init(mMatrixUniform0);
     mVisualObjects.push_back(temp);// [27]
 
+    //Oppgave 10
+    fence = new Fence();
+    fence->init(mMatrixUniform0);
+    fence->mMatrix.translate(55,0,53);
+    mVisualObjects.push_back(fence);// [28]
+    mQuadTre->insert(fence->getPosition2D(), fence);
+
+    fence = new Fence();
+    fence->init(mMatrixUniform0);
+    fence->mMatrix.translate(25,0,45);
+    mVisualObjects.push_back(fence);// [29]
+    mQuadTre->insert(fence->getPosition2D(), fence);
+
+
+    temp = new CollisionAABB(fence);
+    temp->init(mMatrixUniform0);
+    mVisualObjects.push_back(temp);
+
     //**********Set up camera************
     mCurrentCamera = new Camera();
     mCurrentCamera->setPosition(gsl::Vector3D(2.0f, 20.f, 15.f));
@@ -274,6 +295,7 @@ void RenderWindow::render()
     {
         drawObject(0,4);
         drawObject(0,5);// Oppgave 6
+        drawObject(0,0);// Quadtre
     }
     else
         cameraMesh->mMatrix.setPosition(mCurrentCamera->getPosition().x, mCurrentCamera->getPosition().y, mCurrentCamera->getPosition().z);
@@ -298,7 +320,31 @@ void RenderWindow::render()
 
 //    drawObject(0,27);// trofee collision
 
-    drawObject(0,0);// Quadtre
+
+    glUseProgram(mShaderProgram[3]->getProgram() );
+    // Fence1
+    glUniformMatrix4fv(vMatrixUniform3,1,GL_TRUE, mCurrentCamera->mViewMatrix.constData());
+    glUniformMatrix4fv(pMatrixUniform3,1,GL_TRUE, mCurrentCamera->mProjectionMatrix.constData());
+    glUniformMatrix4fv(mMatrixUniform3,1,GL_TRUE, mVisualObjects[28]->mMatrix.constData());
+    glUniform3f(mLightPositionUniform1, mLight->mMatrix.getPosition().x, mLight->mMatrix.getPosition().y, mLight->mMatrix.getPosition().z);
+    glUniform3f(mCameraPositionUniform1, mCurrentCamera->position().x, mCurrentCamera->position().y, mCurrentCamera->position().z);
+    glUniform3f(mLightColorUniform1, mLight->mLightColor.x, mLight->mLightColor.y, mLight->mLightColor.y);
+    glUniform1f(mSpecularStrengthUniform1,mLight->mSpecularStrength);
+
+    mVisualObjects[28]->draw();
+    //Fence 2
+    glUniformMatrix4fv(vMatrixUniform3,1,GL_TRUE, mCurrentCamera->mViewMatrix.constData());
+    glUniformMatrix4fv(pMatrixUniform3,1,GL_TRUE, mCurrentCamera->mProjectionMatrix.constData());
+    glUniformMatrix4fv(mMatrixUniform3,1,GL_TRUE, mVisualObjects[29]->mMatrix.constData());
+    glUniform3f(mLightPositionUniform1, mLight->mMatrix.getPosition().x, mLight->mMatrix.getPosition().y, mLight->mMatrix.getPosition().z);
+    glUniform3f(mCameraPositionUniform1, mCurrentCamera->position().x, mCurrentCamera->position().y, mCurrentCamera->position().z);
+    glUniform3f(mLightColorUniform1, mLight->mLightColor.x, mLight->mLightColor.y, mLight->mLightColor.y);
+    glUniform1f(mSpecularStrengthUniform1,mLight->mSpecularStrength);
+
+    mVisualObjects[29]->draw();
+
+//    drawObject(0,30);// collidertest
+
 
 
     //Calculate framerate before
@@ -344,6 +390,23 @@ void RenderWindow::setupPhongShader(int shaderIndex)
     mLightPowerUniform = glGetUniformLocation(mShaderProgram[shaderIndex]->getProgram(), "lightPower");
     mCameraPositionUniform = glGetUniformLocation(mShaderProgram[shaderIndex]->getProgram(), "cameraPosition");
     mTextureUniform2 = glGetUniformLocation(mShaderProgram[shaderIndex]->getProgram(), "textureSampler");
+}
+
+void RenderWindow::setupPhongWoTextureShader(int shaderIndex)
+{
+    //Oppgave 10
+    mMatrixUniform3 = glGetUniformLocation(mShaderProgram[shaderIndex]->getProgram(), "mMatrix");
+    vMatrixUniform3 = glGetUniformLocation(mShaderProgram[shaderIndex]->getProgram(), "vMatrix");
+    pMatrixUniform3 = glGetUniformLocation(mShaderProgram[shaderIndex]->getProgram(), "pMatrix");
+
+    mLightColorUniform1 = glGetUniformLocation(mShaderProgram[shaderIndex]->getProgram(), "lightColor");
+    mObjectColorUniform1 = glGetUniformLocation(mShaderProgram[shaderIndex]->getProgram(), "objectColor");
+    mAmbientLightStrengthUniform1 = glGetUniformLocation(mShaderProgram[shaderIndex]->getProgram(), "ambientStrength");
+    mLightPositionUniform1 = glGetUniformLocation(mShaderProgram[shaderIndex]->getProgram(), "lightPosition");
+    mSpecularStrengthUniform1 = glGetUniformLocation(mShaderProgram[shaderIndex]->getProgram(), "specularStrength");
+    mSpecularExponentUniform1 = glGetUniformLocation(mShaderProgram[shaderIndex]->getProgram(), "specularExponent");
+    mLightPowerUniform1 = glGetUniformLocation(mShaderProgram[shaderIndex]->getProgram(), "lightPower");
+    mCameraPositionUniform1 = glGetUniformLocation(mShaderProgram[shaderIndex]->getProgram(), "cameraPosition");
 }
 
 void RenderWindow::drawPhong(int objNum)
@@ -494,14 +557,12 @@ void RenderWindow::handleInput()
     float speed;
     if(!specMode)
     {
-        speed = 0.15;
         if(mInput.W)
-            mMap["mia"]->mMatrix.translateZ(-speed);
+            mMap["mia"]->mMatrix.translateZ(-mia->speed);
         if(mInput.A)
             mMap["mia"]->mMatrix.rotateY(-2);
-//            mMap["mia"]->mMatrix.translateX(-speed);
         if(mInput.S)
-            mMap["mia"]->mMatrix.translateZ(speed);
+            mMap["mia"]->mMatrix.translateZ(mia->speed);
         if(mInput.D){
             mMap["mia"]->mMatrix.rotateY(2);
 
@@ -532,7 +593,7 @@ void RenderWindow::handleInput()
     auto posisjon = mMap["mia"]->getPosition2D();
     auto subtre = mQuadTre->find(posisjon);
     for (auto it=subtre->m_sub_objects.begin();it!=subtre->m_sub_objects.end();it++)
-        if((*it)->typeName == "pickup")
+        if((*it)->typeName == "pickup" || (*it)->typeName == "fence")
             mia->collision(*it);
 }
 

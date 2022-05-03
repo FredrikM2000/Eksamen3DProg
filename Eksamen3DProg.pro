@@ -16,6 +16,7 @@ SOURCES += main.cpp \
     disc.cpp \
     door.cpp \
     enemy.cpp \
+    fence.cpp \
     graph.cpp \
     heightmap.cpp \
     house.cpp \
@@ -54,6 +55,7 @@ HEADERS += \
     disc.h \
     door.h \
     enemy.h \
+    fence.h \
     gsl/gltypes.h \
     graph.h \
     heightmap.h \
@@ -92,6 +94,8 @@ DISTFILES += \
     Test.txt \
     matteOblig2.txt \
     matte_oblig1.txt \
+    phong_wo_texture.frag \
+    phong_wo_texture.vert \
     phongfragment.frag \
     phongvertex.vert \
     plainshader.frag \

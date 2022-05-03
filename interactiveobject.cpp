@@ -90,10 +90,24 @@ void InteractiveObject::readFile()
 
 void InteractiveObject::collision(VisualObject* gameObject)
 {
+    //Oppgave 10
+    gsl::Vector2D playerPos = mMatrix.getPosition2D();
+    if(gameObject->typeName == "fence")
+        if(collider->isColliding(gameObject, playerPos))
+        {
+            if(playerPos.x < gameObject->mMatrix.getPosition2D().x)
+                mMatrix.setPositionX(playerPos.x-speed);
+            if(playerPos.x > gameObject->mMatrix.getPosition2D().x)
+                mMatrix.setPositionX(playerPos.x+speed);
+            if(playerPos.z < gameObject->mMatrix.getPosition2D().z)
+                mMatrix.setPositionZ(playerPos.z-speed);
+            if(playerPos.z > gameObject->mMatrix.getPosition2D().z)
+                mMatrix.setPositionZ(playerPos.z+speed);
+        }
+    //Oppgave 8
     if(gameObject->m_name == "red")
-        if(collider->isColliding(gameObject, this->mMatrix.getPosition2D()))
+        if(collider->isColliding(gameObject, playerPos))
             gameObject->bDraw = false;
-
 }
 
 void InteractiveObject::createCollisionBox(bool draw)

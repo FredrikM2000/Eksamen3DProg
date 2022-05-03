@@ -35,6 +35,7 @@
 #include "heightmap.h"
 #include "objmesh.h"
 #include "collisionaabb.h"
+#include "fence.h"
 
 #include "Input.h"
 
@@ -91,6 +92,8 @@ private:
     ObjMesh* cameraMesh;
     Enemy* enemy;
     Trofee* trofee;
+    Fence* fence;
+
 
 
 
@@ -147,6 +150,8 @@ private:
     GLint vMatrixUniform2{-1};
     GLint pMatrixUniform2{-1};
 
+
+
     //other light shader variables
     GLint mLightColorUniform{-1};
     GLint mObjectColorUniform{-1};
@@ -157,6 +162,20 @@ private:
     GLint mSpecularExponentUniform{-1};
     GLint mLightPowerUniform{-1};
     GLint mTextureUniform2{-1};
+
+    void setupPhongWoTextureShader(int shaderIndex);
+    GLint mMatrixUniform3{-1};
+    GLint vMatrixUniform3{-1};
+    GLint pMatrixUniform3{-1};
+
+    GLint mLightColorUniform1{-1};
+    GLint mObjectColorUniform1{-1};
+    GLint mAmbientLightStrengthUniform1{-1};
+    GLint mLightPositionUniform1{-1};
+    GLint mCameraPositionUniform1{-1};
+    GLint mSpecularStrengthUniform1{-1};
+    GLint mSpecularExponentUniform1{-1};
+    GLint mLightPowerUniform1{-1};
 
 
     Texture *mTexture[4]{nullptr};

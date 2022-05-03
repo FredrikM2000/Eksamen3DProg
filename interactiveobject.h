@@ -18,6 +18,8 @@ public:
     void readFile();
     void collision(VisualObject* gameObject);
     void createCollisionBox(bool draw);
+
+    float speed = 0.15;
 private:
    TriangleSurface* curve;
    float mx, my, mz; // posisjon
