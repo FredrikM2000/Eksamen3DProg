@@ -79,6 +79,7 @@ bool CollisionSphere::isColliding(VisualObject *other, gsl::Vector2D playerPos)
 
     float distance = sqrt(pow(this_values[0] - other_values[0], 2) + pow(this_values[1] - other_values[1],2) + pow(this_values[2] - other_values[2], 2));
 
+    qDebug() << distance;
     if (distance < (this_values[3] + other_values[3]))
         return true;
     return false;

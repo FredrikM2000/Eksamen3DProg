@@ -3,6 +3,7 @@
 
 #include "visualobject.h"
 #include "visualcurve.h"
+#include "bomb.h"
 
 class NPC : public VisualObject
 {
@@ -15,7 +16,7 @@ public:
     void move();
     void moveTowards();
     void switchGraph();
-    void dropBombs();
+    void dropBomb();
 
 private:
     Vertex k1, k2, k3, k4, k5, k6, k7, k8;
@@ -28,6 +29,8 @@ private:
     float time{1};
     int i = 1;
     bool turn{false};
+
+    Bomb* bomb;
 
 };
 

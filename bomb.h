@@ -14,7 +14,6 @@ public:
     void draw() override;
     void createMesh();
 
-private:
     ObjMesh* mesh;
 };
 

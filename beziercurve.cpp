@@ -3,10 +3,10 @@
 BezierCurve::BezierCurve()
 {
 
-    c[0] = gsl::Vector3D(70,10,65);
-    c[1] = gsl::Vector3D(70,10,35);
-    c[2] = gsl::Vector3D(30,10,55);
-    c[3] = gsl::Vector3D(40,10,60);
+    c[0] = gsl::Vector3D(70,20,65);
+    c[1] = gsl::Vector3D(70,20,35);
+    c[2] = gsl::Vector3D(30,20,55);
+    c[3] = gsl::Vector3D(40,20,60);
 
     double  dt=0.05;
      for (auto t=0.0; t<1.001; t+=dt)

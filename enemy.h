@@ -6,6 +6,8 @@
 #include "collisionaabb.h"
 #include "objmesh.h"
 
+#include <QElapsedTimer>
+
 class Enemy : public VisualObject
 {
 public:
@@ -18,6 +20,8 @@ public:
     void collision(VisualObject* gameObject);
     void construct();
     void createCollisionBox(bool draw);
+    void stun();
+
 
     //Opgave 13
     int time{1};
@@ -33,6 +37,7 @@ private:
     Trofee trofee;
     CollisionAABB *collider;
     ObjMesh* mesh;
+    QElapsedTimer timer;
 };
 
 #endif // ENEMY_H

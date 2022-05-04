@@ -40,6 +40,7 @@ NPC::NPC(std::vector<Vertex> vertices)
     otherVertices = vertices;
 
     mMatrix.setToIdentity();
+    dropBomb();
 }
 
 NPC::~NPC()
@@ -94,6 +95,13 @@ void NPC::draw()
 
 //    qDebug() << mMatrix.getPosition();
 //    moveTowards();
+
+    if(bomb)
+    {
+        bomb->draw();
+        bomb->mMatrix.translateY(-20.1);
+    }
+
 
 }
 
@@ -163,9 +171,10 @@ void NPC::switchGraph()
         bCurrentGraph = true;
 }
 
-void NPC::dropBombs()
+void NPC::dropBomb()
 {
-    qDebug() << "";
+    bomb = new Bomb;
+    bomb->init(mMatrixUniform);
 }
 
 void NPC::side(Vertex m_k1, Vertex m_k2, Vertex m_k3, Vertex m_k4)

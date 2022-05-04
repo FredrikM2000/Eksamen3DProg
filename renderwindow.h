@@ -199,7 +199,7 @@ private:
     int condition = 3;
     bool bDrawBillboard{false};
 
-    QElapsedTimer timer;
+    QElapsedTimer timer;// Hentet fra https://stackoverflow.com/questions/244646/get-elapsed-time-in-qt
 
 
 protected:

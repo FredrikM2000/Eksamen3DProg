@@ -69,6 +69,11 @@ void InteractiveObject::draw()
 
     if(bdrawPLan)
         plan->draw();
+
+    if(timer.elapsed() > 2000)
+    {
+        speed = 0.15;
+    }
 }
 
 void InteractiveObject::collision(VisualObject* gameObject)
@@ -96,9 +101,9 @@ void InteractiveObject::collision(VisualObject* gameObject)
                 collectedTrophies++;
             }
 
-    if(gameObject->typeName == "bomb")
-        if(sphere->isColliding(gameObject, playerPos))
-            qDebug() << "Funka";
+//    if(gameObject->typeName == "bomb")
+//        if(sphere->isColliding(gameObject, playerPos))
+//            qDebug() << "Funka";
 
 }
 
@@ -115,6 +120,12 @@ void InteractiveObject::createCollisionSphere()
     sphere->init(mMatrixUniform);
 }
 
+void InteractiveObject::collisionWithBomb(ObjMesh* bomb)
+{
+//    if(collider->isColliding(bomb, mMatrix.getPosition2D()))
+//        qDebug() << "Funka";
+}
+
 void InteractiveObject::spawnBillboard()
 {
     plan = new Plan ();
@@ -122,6 +133,12 @@ void InteractiveObject::spawnBillboard()
     bdrawPLan = true;
     plan->mMatrix.setPosition(50,20,50);
     qDebug() << plan->mMatrix.getPosition();
+}
+
+void InteractiveObject::stun()// Oppgave 7
+{
+    speed = 0;
+    timer.start();
 }
 
 

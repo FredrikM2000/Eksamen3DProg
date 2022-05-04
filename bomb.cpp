@@ -20,11 +20,13 @@ void Bomb::init(GLint matrixUniform)
 
 void Bomb::draw()
 {
-    mMatrix.translateY(-0.1);
     if(mMatrix.getPosition().y < 0)
         mesh->bDraw = false;
-
-    mesh->draw();
+    else
+    {
+        mMatrix.translateY(-0.25);
+        mesh->draw();
+    }
 }
 
 void Bomb::createMesh()

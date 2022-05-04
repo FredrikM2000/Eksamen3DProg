@@ -63,6 +63,9 @@ void Enemy::draw()
     }
     if(bDrawBox)
         collider->draw();
+
+    if(timer.elapsed() > 2000)
+        speed = 0.15;
 }
 
 void Enemy::move()
@@ -111,6 +114,12 @@ void Enemy::createCollisionBox(bool draw)
     collider = new CollisionAABB (this->mesh);
     collider->init(mMatrixUniform);
     bDrawBox = draw;
+}
+
+void Enemy::stun()
+{
+    speed = 0;
+    timer.start();
 }
 
 

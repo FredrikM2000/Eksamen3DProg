@@ -387,8 +387,10 @@ void RenderWindow::render()
 
     if(timer.elapsed() > 2000)
     {
-        npc->dropBombs();
+        bomb->mMatrix.setPosition(npc->mMatrix.getPosition().x, npc->mMatrix.getPosition().y, npc->mMatrix.getPosition().z);
+        npc->dropBomb();
         timer.restart();
+
     }
 
     drawObject(0,33);//bomb
@@ -689,6 +691,9 @@ void RenderWindow::handleInput()
         if(mInput.Q)
             mCurrentCamera->updateHeigth(-speed);
     }
+    if(bomb != nullptr)
+        mia->collisionWithBomb(bomb->mesh);
+
 
     auto posisjon = mMap["mia"]->getPosition2D();
     auto subtre = mQuadTre->find(posisjon);
@@ -721,6 +726,10 @@ void RenderWindow::keyPressEvent(QKeyEvent *event)
         mInput.LShift = true;
     if(event->key() == Qt::Key_Control)
         mInput.LCtrl = true;
+
+    if(event->key() == Qt::Key_P)
+        enemy->stun();
+//        mia->stun();
 
 
     if(event->key() == Qt::Key_E)

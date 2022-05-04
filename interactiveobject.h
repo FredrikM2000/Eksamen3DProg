@@ -8,6 +8,10 @@
 #include "collisionsphere.h"
 #include "trofee.h"
 #include "plan.h"
+#include "bomb.h"
+
+#include <QElapsedTimer>
+
 
 class InteractiveObject : public VisualObject
 {
@@ -19,7 +23,9 @@ public:
     void collision(VisualObject* gameObject);
     void createCollisionBox(bool draw);
     void createCollisionSphere();
+    void collisionWithBomb(ObjMesh* bomb);
     void spawnBillboard();
+    void stun();
 
     float speed = 0.15;
     int collectedTrophies{0};
@@ -35,6 +41,8 @@ private:
 
    bool bdrawPLan{false};
    bool bDrawBox;
+
+   QElapsedTimer timer;
 };
 
 #endif // INTERACTIVEOBJECT_H
