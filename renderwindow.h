@@ -61,6 +61,7 @@ public:
     void exposeEvent(QExposeEvent *) override;  //gets called when app is shown and resized
 
     void changeMode();
+    void reset();
 
 private slots:
     void render();          //the actual render - function
@@ -90,8 +91,6 @@ private:
     Enemy* enemy;
     Trofee* trofee;
     Fence* fence;
-
-
 
 
     void init();            //initialize things we need before rendering

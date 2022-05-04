@@ -453,6 +453,18 @@ void RenderWindow::changeMode()
 }
 
 
+void RenderWindow::reset()
+{// Oppgave 14
+    mia->collectedTrophies = 0;
+    enemy->collectedTrophies = 0;
+
+    for(int i = 6; i < 26; i++)
+        mVisualObjects[i]->bDraw = true;
+
+    mia->mMatrix.setPosition(50,0,70);
+    enemy->mMatrix.setPosition(60,0,70);
+}
+
 void RenderWindow::drawObject(int shadeNum, int objNum)
 {
     glUseProgram(mShaderProgram[shadeNum]->getProgram() );

@@ -84,7 +84,7 @@ void MainWindow::on_fileExit_triggered()
 //Oppgave 6
 void MainWindow::on_resetButton_clicked()
 {
-    qDebug() << "works";
+    mRenderWindow->reset();
 }
 
 
