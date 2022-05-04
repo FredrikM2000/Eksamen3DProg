@@ -60,10 +60,7 @@ public:
 
     void exposeEvent(QExposeEvent *) override;  //gets called when app is shown and resized
 
-
-
-
-    bool mRotate{true};     //Check if triangle should rotate
+    void changeMode();
 
 private slots:
     void render();          //the actual render - function

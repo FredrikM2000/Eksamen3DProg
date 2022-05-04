@@ -22,6 +22,10 @@ private slots:
     ///Slot called from the File->Exit menu in the mainwindow.ui file
     void on_fileExit_triggered();
 
+    void on_resetButton_clicked();
+
+    void on_modeButton_clicked(bool checked);
+
 private:
     ///called from the constructor. Initializes different parts of the program.
     void init();

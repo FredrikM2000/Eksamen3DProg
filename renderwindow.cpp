@@ -435,6 +435,23 @@ void RenderWindow::winCondition()
     }
 }
 
+void RenderWindow::changeMode()
+{
+    if(specMode)
+    {
+        specMode = false;
+        time = 1;
+        mCurrentCamera->switchView();
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+        poly = false;
+    }
+    else if(!specMode){
+        specMode = true;
+        time = 0;
+        mCurrentCamera->switchView();
+    }
+}
+
 
 void RenderWindow::drawObject(int shadeNum, int objNum)
 {
@@ -636,24 +653,6 @@ void RenderWindow::keyPressEvent(QKeyEvent *event)
     if(event->key() == Qt::Key_Control)
         mInput.LCtrl = true;
 
-
-
-    if(event->key() == Qt::Key_X)
-    {
-        if(specMode)
-        {
-            specMode = false;
-            time = 1;
-            mCurrentCamera->switchView();
-            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-            poly = false;
-        }
-        else if(!specMode){
-            specMode = true;
-            time = 0;
-            mCurrentCamera->switchView();
-        }
-    }
 
     if(event->key() == Qt::Key_E)
         mInput.E = true;

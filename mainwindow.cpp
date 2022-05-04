@@ -81,3 +81,20 @@ void MainWindow::on_fileExit_triggered()
     close();       //Shuts down the whole program
 }
 
+//Oppgave 6
+void MainWindow::on_resetButton_clicked()
+{
+    qDebug() << "works";
+}
+
+
+void MainWindow::on_modeButton_clicked(bool checked)
+{
+    if(checked)
+        ui->modeButton->setText("Spill");
+    else
+        ui->modeButton->setText("Editor");
+
+    mRenderWindow->changeMode();
+}
+
