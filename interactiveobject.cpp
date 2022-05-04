@@ -77,6 +77,7 @@ void InteractiveObject::collision(VisualObject* gameObject)
     if(gameObject->typeName == "fence")
         if(collider->isColliding(gameObject, playerPos))
         {
+            //Setter spiller tilbake så mye som den farta den kom fra, og passer på at den gjør det for rett side av gjerdet
             if(playerPos.x < gameObject->mMatrix.getPosition2D().x)
                 mMatrix.setPositionX(playerPos.x-speed);
             if(playerPos.x > gameObject->mMatrix.getPosition2D().x)

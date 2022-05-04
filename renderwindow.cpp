@@ -326,7 +326,7 @@ void RenderWindow::render()
         cameraMesh->mMatrix.setPosition(mCurrentCamera->getPosition().x, mCurrentCamera->getPosition().y, mCurrentCamera->getPosition().z);
 
 
-
+    //Tegner alle trofeer
     for(int i = 6; i < 26; i++)
         drawObject(0,i);
 
@@ -334,9 +334,11 @@ void RenderWindow::render()
     enemy->time = time;
     //Oppgave 9
     drawObject(0,26);// enemy
+    //Setter enemy på riktig høyde
     float enemyY = mHeightmap->SetYCoord(mMap["enemy"]->mMatrix.getPosition().getX(), mMap["enemy"]->mMatrix.getPosition().getZ());
     mMap["enemy"]->mMatrix.setPositionY(enemyY + 1);
 
+    //Lar enemy bruke quadtre til å finne trofeer
     auto posisjon = mMap["enemy"]->getPosition2D();
     auto subtre = mQuadTre->find(posisjon);
     for (auto it=subtre->m_sub_objects.begin();it!=subtre->m_sub_objects.end();it++)
@@ -373,7 +375,7 @@ void RenderWindow::render()
 
     if(time == 1)
     {
-    if(timer.elapsed() > 2000)
+    if(timer.elapsed() > 2000)// spawner for at bomben tilbake til NPCen
         {
             bomb->mMatrix.setPosition(npc->mMatrix.getPosition().x, npc->mMatrix.getPosition().y, npc->mMatrix.getPosition().z);
             timer.restart();
@@ -474,7 +476,7 @@ void RenderWindow::winCondition()
     if(mia->collectedTrophies == 10)
     {
         bDrawBillboard = true;
-        condition = 3;
+        condition = 3;//Brukers for å vitew hvilken tekstur som skal vises når spillet er over
         time = 0;
     }
     if(enemy->collectedTrophies == 10)
@@ -503,7 +505,7 @@ void RenderWindow::changeMode()
 }
 
 
-void RenderWindow::reset()
+void RenderWindow::reset()// Setter alle objekter der de skal
 {// Oppgave 14
     mia->collectedTrophies = 0;
     enemy->collectedTrophies = 0;

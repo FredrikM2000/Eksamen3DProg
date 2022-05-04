@@ -69,7 +69,7 @@ void Enemy::draw()
 }
 
 void Enemy::moveTowards() //Oppgave 9
-{
+{//Beveger seg mot neste trofee
     if(collectedTrophies > 9)
         return;
     gsl::Vector2D trophyXZ;

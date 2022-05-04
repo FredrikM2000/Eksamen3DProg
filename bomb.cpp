@@ -22,7 +22,7 @@ void Bomb::draw()
     else
     {
         if(time == 1)
-            mMatrix.translateY(-0.25);
+            mMatrix.translateY(-0.25);//Faller ned med engang den spawner
         mesh->draw();
     }
 }
