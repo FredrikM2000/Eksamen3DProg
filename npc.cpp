@@ -90,7 +90,7 @@ void NPC::draw()
     glBindVertexArray(0);
 }
 
-void NPC::moveTowards()//Finner ut hvilken retning neste trofee er, og beveger seg mot den
+void NPC::moveTowards()//Finner ut hvilken retning neste vertice i zier kurven, og beveger seg mot den
 {//Oppgave 7
     if(i > otherVertices.size()-1)
     {
