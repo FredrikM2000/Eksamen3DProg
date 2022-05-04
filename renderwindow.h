@@ -93,6 +93,7 @@ private:
     Trofee* trofee;
     Fence* fence;
     Bomb* bomb;
+    Plan* plan;
 
 
     void init();            //initialize things we need before rendering
@@ -176,7 +177,7 @@ private:
     GLint mLightPowerUniform1{-1};
 
 
-    Texture *mTexture[4]{nullptr};
+    Texture *mTexture[5]{nullptr};
     Shader *mShaderProgram[4]{nullptr};
 
     Camera *mCurrentCamera;
@@ -195,6 +196,8 @@ private:
     void drawPhong(int objNum);
 
     void winCondition();
+    int condition = 3;
+    bool bDrawBillboard{false};
 
     QElapsedTimer timer;
 

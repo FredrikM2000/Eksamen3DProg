@@ -67,26 +67,8 @@ void InteractiveObject::draw()
     if(bDrawBox)
         collider->draw();
 
-}
-
-void InteractiveObject::readFile()
-{
-    std::string file = "../3Dprog22/rainbowCube.txt";
-    std::ifstream inn;
-     inn.open(file.c_str());
-
-     if (inn.is_open()) {
-         //int n;
-         Vertex vertex;
-         //inn >> n;
-         //mVertices.reserve(n);
-         while (true) {
-              inn >> vertex;
-              if(inn.eof())break;
-              mVertices.push_back(vertex);
-         }
-         inn.close();
-     }
+    if(bdrawPLan)
+        plan->draw();
 }
 
 void InteractiveObject::collision(VisualObject* gameObject)
@@ -131,6 +113,15 @@ void InteractiveObject::createCollisionSphere()
 {
     sphere = new CollisionSphere (this->mesh);
     sphere->init(mMatrixUniform);
+}
+
+void InteractiveObject::spawnBillboard()
+{
+    plan = new Plan ();
+    plan->init(mMatrixUniform);
+    bdrawPLan = true;
+    plan->mMatrix.setPosition(50,20,50);
+    qDebug() << plan->mMatrix.getPosition();
 }
 
 

@@ -129,6 +129,8 @@ void RenderWindow::init()
     mTexture[0] = new Texture();
     mTexture[1] = new Texture("../Eksamen3DProg/Assets/PlayerTexture.bmp");
     mTexture[2] = new Texture("../Eksamen3DProg/Assets/Grass.bmp");//Tekstur hentet fra https://www.creativeswall.com/65-free-high-resolution-grass-textures/
+    mTexture[3] = new Texture("../Eksamen3DProg/Assets/Win.bmp");
+    mTexture[4] = new Texture("../Eksamen3DProg/Assets/Lose.bmp");
 
     //set the textures loaded to a texture unit (also called texture slot)
     glActiveTexture(GL_TEXTURE0);
@@ -137,6 +139,10 @@ void RenderWindow::init()
     glBindTexture(GL_TEXTURE_2D, mTexture[1]->id());
     glActiveTexture(GL_TEXTURE2);
     glBindTexture(GL_TEXTURE_2D, mTexture[2]->id());
+    glActiveTexture(GL_TEXTURE3);
+    glBindTexture(GL_TEXTURE_2D, mTexture[3]->id());
+    glActiveTexture(GL_TEXTURE4);
+    glBindTexture(GL_TEXTURE_2D, mTexture[4]->id());
 
     //making objects to be drawn
 
@@ -239,6 +245,12 @@ void RenderWindow::init()
     bomb->mMatrix.setPosition(50,20,50);
     mVisualObjects.push_back(bomb);// [33]
     mQuadTre->insert(bomb->getPosition2D(), bomb);
+
+    plan = new Plan();
+    plan->init(mMatrixUniform1);
+    plan->mMatrix.setPosition(40, 10, 50);
+    plan->mMatrix.scale(20);
+    mVisualObjects.push_back(plan);// [34]
 
     //**********Set up camera************
     mCurrentCamera = new Camera();
@@ -381,6 +393,16 @@ void RenderWindow::render()
 
     drawObject(0,33);//bomb
 
+    glUseProgram(mShaderProgram[1]->getProgram() );
+    // Texture Plan
+    glUniformMatrix4fv(vMatrixUniform1,1,GL_TRUE, mCurrentCamera->mViewMatrix.constData());
+    glUniformMatrix4fv(pMatrixUniform1,1,GL_TRUE, mCurrentCamera->mProjectionMatrix.constData());
+    glUniformMatrix4fv(mMatrixUniform1,1,GL_TRUE, mVisualObjects[34]->mMatrix.constData());
+    glUniform1i(mTextureUniform, condition);
+    if(bDrawBillboard)
+        mVisualObjects[34]->draw();
+
+
     //Calculate framerate before
     // checkForGLerrors() because that call takes a long time
     // and before swapBuffers(), else it will show the vsync time
@@ -459,12 +481,13 @@ void RenderWindow::winCondition()
 {// Oppgave 12
     if(mia->collectedTrophies == 10)
     {
-        qDebug() << "You win";
+        bDrawBillboard = true;
         time = 0;
     }
     if(enemy->collectedTrophies == 10)
     {
-        qDebug() << "You lose";
+        condition = 4;
+        bDrawBillboard = true;
         time = 0;
     }
 }

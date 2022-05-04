@@ -7,6 +7,7 @@
 #include "objmesh.h"
 #include "collisionsphere.h"
 #include "trofee.h"
+#include "plan.h"
 
 class InteractiveObject : public VisualObject
 {
@@ -15,10 +16,10 @@ public:
     ~InteractiveObject() override;
     void init(GLint matrixUniform) override;
     void draw() override;
-    void readFile();
     void collision(VisualObject* gameObject);
     void createCollisionBox(bool draw);
     void createCollisionSphere();
+    void spawnBillboard();
 
     float speed = 0.15;
     int collectedTrophies{0};
@@ -30,7 +31,9 @@ private:
    ObjMesh *mesh;
    CollisionAABB *collider;
    CollisionSphere *sphere;
+   Plan* plan;
 
+   bool bdrawPLan{false};
    bool bDrawBox;
 };
 

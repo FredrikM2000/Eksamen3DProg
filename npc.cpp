@@ -165,7 +165,7 @@ void NPC::switchGraph()
 
 void NPC::dropBombs()
 {
-    qDebug() << "Well done";
+    qDebug() << "";
 }
 
 void NPC::side(Vertex m_k1, Vertex m_k2, Vertex m_k3, Vertex m_k4)
