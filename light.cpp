@@ -4,22 +4,9 @@
 
 Light::Light()
 {
-//    mVertices.push_back(Vertex{-0.25f, -0.25f, 0.25f, 0.8f, 0.8f, 0.3f, 0.f,0.f});
-//    mVertices.push_back(Vertex{0.25f, -0.25f, 0.25f, 0.8f, 0.8f, 0.3f, 1.f,0.f});
-//    mVertices.push_back(Vertex{0.f, 0.25f, 0.f, 0.8f, 0.8f, 0.3f, 0.5f,0.5f});
-//    mVertices.push_back(Vertex{0.f, -0.25f, -0.25f, 0.8f, 0.8f, 0.3f, 0.5f,0.5f});
-
-//    mIndices.insert(mIndices.end(),
-//    {   0,1,2,
-//        1,3,2,
-//        3,0,2,
-//        0,3,1
-//    });
     //Oppgave 3
     obj = new ObjMesh("../Eksamen3DProg/Assets/obj_files/Sphere.obj", false, 0.9,1,0);
     obj->init(mMatrixUniform);
-
-
 
     mMatrix.setToIdentity();
 }
@@ -69,12 +56,6 @@ void Light::draw()
     if(obj)
         obj->draw();
 }
-
-void Light::createObj()
-{
-//    obj = new ObjMesh("../Eksamen/Assets/obj_files/Sphere.obj");
-}
-
 
 
 

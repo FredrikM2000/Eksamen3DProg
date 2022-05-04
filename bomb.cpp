@@ -8,10 +8,7 @@ Bomb::Bomb()
     mMatrix.setToIdentity();
 }
 
-Bomb::~Bomb()
-{
-
-}
+Bomb::~Bomb(){}
 
 void Bomb::init(GLint matrixUniform)
 {
@@ -24,12 +21,8 @@ void Bomb::draw()
         mesh->bDraw = false;
     else
     {
-        mMatrix.translateY(-0.25);
+        if(time == 1)
+            mMatrix.translateY(-0.25);
         mesh->draw();
     }
-}
-
-void Bomb::createMesh()
-{
-
 }

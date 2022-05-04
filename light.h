@@ -19,7 +19,6 @@ public:
     GLfloat mSpecularStrength{0.9f};
     GLint mSpecularExponent{4};
 
-    void createObj();
 private:
     ObjMesh * obj;
 };

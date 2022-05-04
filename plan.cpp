@@ -3,12 +3,12 @@
 Plan::Plan()
 {
     mVertices.push_back(Vertex{0.f,0.f,0.f,         0.f,0.f,1.f,     0.f,0.f});
-    mVertices.push_back(Vertex{1.f, 0.f, 0.f,       0.f,0.f,1.f,     1.f,0.f});
+    mVertices.push_back(Vertex{2.f, 0.f, 0.f,       0.f,0.f,1.f,     1.f,0.f});
     mVertices.push_back(Vertex{0.f, 1.f, 0.f,       0.f,0.f, 1.f,        0.f,1.f});
 
-    mVertices.push_back(Vertex{1.f, 0.f, 0.f,       0.f,0.f,1.f,     1.f,0.f});
+    mVertices.push_back(Vertex{2.f, 0.f, 0.f,       0.f,0.f,1.f,     1.f,0.f});
     mVertices.push_back(Vertex{0.f, 1.f, 0.f,       0.f,0.f,1.f,        0.f,1.f});
-    mVertices.push_back(Vertex{1.f, 1.f, 0.f,       0.f,0.f,1.f,     1.f,1.f});
+    mVertices.push_back(Vertex{2.f, 1.f, 0.f,       0.f,0.f,1.f,     1.f,1.f});
 
     mMatrix.setToIdentity();
 }

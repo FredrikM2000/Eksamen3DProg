@@ -2,7 +2,6 @@
 
 BezierCurve::BezierCurve()
 {
-
     c[0] = gsl::Vector3D(70,20,65);
     c[1] = gsl::Vector3D(70,20,35);
     c[2] = gsl::Vector3D(30,20,55);
@@ -74,6 +73,4 @@ void BezierCurve::draw()
     glBindVertexArray( mVAO );
     glUniformMatrix4fv( mMatrixUniform, 1, GL_FALSE, mMatrix.constData());
     glDrawArrays(GL_LINE_STRIP, 0, mVertices.size());
-//    if(npc)
-//        npc->draw();
 }

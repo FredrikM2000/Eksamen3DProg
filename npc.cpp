@@ -17,9 +17,6 @@ NPC::NPC()
     side(k3,k4,k8,k6);
     side(k7,k5,k1,k2);
 
-    mPosition(0,3) = mx;
-    mPosition(1,3) = curve->func1(mx);
-
     mMatrix.setToIdentity();
 }
 
@@ -27,20 +24,19 @@ NPC::NPC(std::vector<Vertex> vertices)
 {
 
     mVertices.push_back(Vertex{0,0,0, 0,0,5});
-    mVertices.push_back(Vertex{5,0,0, 0,0,5});
-    mVertices.push_back(Vertex{5,0,5, 0,0,5});
-    mVertices.push_back(Vertex{0,0,5, 0,0,5});
-    mVertices.push_back(Vertex{0,5,0, 0,0,5});
-    mVertices.push_back(Vertex{5,5,0, 0,0,5});
-    mVertices.push_back(Vertex{5,5,5, 0,0,5});
-    mVertices.push_back(Vertex{0,5,5, 0,0,5});
+    mVertices.push_back(Vertex{3,0,0, 0,0,5});
+    mVertices.push_back(Vertex{3,0,3, 0,0,5});
+    mVertices.push_back(Vertex{0,0,3, 0,0,5});
+    mVertices.push_back(Vertex{0,3,0, 0,0,5});
+    mVertices.push_back(Vertex{3,3,0, 0,0,5});
+    mVertices.push_back(Vertex{3,3,3, 0,0,5});
+    mVertices.push_back(Vertex{0,3,3, 0,0,5});
 
     mIndices.insert(mIndices.end(), {0,1,4, 1,4,5, 1,2,5, 5,2,6, 2,3,6, 6,3,7, 3,0,7, 7,0,2, 0,1,2, 0,2,3, 4,5,6, 4,6,7});
 
     otherVertices = vertices;
 
     mMatrix.setToIdentity();
-    dropBomb();
 }
 
 NPC::~NPC()
@@ -92,34 +88,6 @@ void NPC::draw()
     glBindVertexArray(mVAO);
     glDrawElements(GL_TRIANGLES, mIndices.size(), GL_UNSIGNED_INT, nullptr);
     glBindVertexArray(0);
-
-//    qDebug() << mMatrix.getPosition();
-//    moveTowards();
-
-    if(bomb)
-    {
-        bomb->draw();
-        bomb->mMatrix.translateY(-20.1);
-    }
-
-
-}
-
-void NPC::move()
-{
-//    if(mx > 2)
-//        dt = dt * -1;
-//    else if(mx < -2)
-//        dt = dt * -1;
-
-//    mx += dt;
-//    mPosition(0,3) = mx;
-//    if(bCurrentGraph)
-//        mPosition(1,3) = curve->func1(mx);
-//    else
-//        mPosition(1,3) = curve->func2(mx);
-
-//    mMatrix = mPosition;
 }
 
 void NPC::moveTowards()
@@ -163,19 +131,7 @@ void NPC::moveTowards()
     }
 }
 
-void NPC::switchGraph()
-{
-    if(bCurrentGraph)
-        bCurrentGraph = false;
-    else
-        bCurrentGraph = true;
-}
 
-void NPC::dropBomb()
-{
-    bomb = new Bomb;
-    bomb->init(mMatrixUniform);
-}
 
 void NPC::side(Vertex m_k1, Vertex m_k2, Vertex m_k3, Vertex m_k4)
 {

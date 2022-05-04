@@ -11,10 +11,7 @@ InteractiveObject::InteractiveObject()
     mMatrix.setToIdentity();
 }
 
-InteractiveObject::~InteractiveObject()
-{
-
-}
+InteractiveObject::~InteractiveObject(){}
 
 void InteractiveObject::init(GLint matrixUniform)
 {
@@ -67,9 +64,6 @@ void InteractiveObject::draw()
     if(bDrawBox)
         collider->draw();
 
-    if(bdrawPLan)
-        plan->draw();
-
     if(timer.elapsed() > 2000)
     {
         speed = 0.15;
@@ -112,27 +106,6 @@ void InteractiveObject::createCollisionBox(bool draw)
     collider = new CollisionAABB (this->mesh);
     collider->init(mMatrixUniform);
     bDrawBox = draw;
-}
-
-void InteractiveObject::createCollisionSphere()
-{
-    sphere = new CollisionSphere (this->mesh);
-    sphere->init(mMatrixUniform);
-}
-
-void InteractiveObject::collisionWithBomb(ObjMesh* bomb)
-{
-//    if(collider->isColliding(bomb, mMatrix.getPosition2D()))
-//        qDebug() << "Funka";
-}
-
-void InteractiveObject::spawnBillboard()
-{
-    plan = new Plan ();
-    plan->init(mMatrixUniform);
-    bdrawPLan = true;
-    plan->mMatrix.setPosition(50,20,50);
-    qDebug() << plan->mMatrix.getPosition();
 }
 
 void InteractiveObject::stun()// Oppgave 7

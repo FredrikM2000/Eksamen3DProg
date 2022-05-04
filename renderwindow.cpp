@@ -165,7 +165,6 @@ void RenderWindow::init()
     mia = new InteractiveObject();
     mia->init(mMatrixUniform2);
     mia->createCollisionBox(false);
-    mia->createCollisionSphere();
     mia->mMatrix.setPosition(50,0,70);
     mVisualObjects.push_back(mia);// [3]
     mMap.insert(std::pair<std::string, VisualObject*>{"mia", mia});
@@ -208,49 +207,40 @@ void RenderWindow::init()
     mVisualObjects.push_back(enemy);// [26]
     mMap.insert(std::pair<std::string, VisualObject*>{"enemy", enemy});
 
-    temp = new CollisionAABB(trofee);
-    temp->init(mMatrixUniform0);
-    mVisualObjects.push_back(temp);// [27]
-
     //Oppgave 10
     fence = new Fence();
     fence->init(mMatrixUniform0);
     fence->mMatrix.translate(55,0,53);
-    mVisualObjects.push_back(fence);// [28]
+    mVisualObjects.push_back(fence);// [27]
     mQuadTre->insert(fence->getPosition2D(), fence);
 
     fence = new Fence();
     fence->init(mMatrixUniform0);
     fence->mMatrix.translate(25,0,45);
-    mVisualObjects.push_back(fence);// [29]
+    mVisualObjects.push_back(fence);// [28]
     mQuadTre->insert(fence->getPosition2D(), fence);
-
-
-    temp = new CollisionAABB(fence);
-    temp->init(mMatrixUniform0);
-    mVisualObjects.push_back(temp);//[30]
 
     bez = new BezierCurve();
     bez->init(mMatrixUniform0);
-    mVisualObjects.push_back(bez);// [31]
+    mVisualObjects.push_back(bez);// [29]
 
     npc = new NPC(bez->getVertices());
     npc->init(mMatrixUniform0);
 //    temp->mMatrix.scale(10);
     npc->mMatrix.setPosition(bez->getVertices().at(0).m_xyz[0], bez->getVertices().at(0).m_xyz[1], bez->getVertices().at(0).m_xyz[2]);
-    mVisualObjects.push_back(npc);// [32]
+    mVisualObjects.push_back(npc);// [30]
 
     bomb = new Bomb();
     bomb->init(mMatrixUniform0);
-    bomb->mMatrix.setPosition(50,20,50);
-    mVisualObjects.push_back(bomb);// [33]
+    bomb->mMatrix.setPosition(npc->mMatrix.getPosition().x, npc->mMatrix.getPosition().y, npc->mMatrix.getPosition().z);
+    mVisualObjects.push_back(bomb);// [31]
     mQuadTre->insert(bomb->getPosition2D(), bomb);
 
     plan = new Plan();
     plan->init(mMatrixUniform1);
-    plan->mMatrix.setPosition(40, 10, 50);
+    plan->mMatrix.setPosition(30, 10, 20);
     plan->mMatrix.scale(20);
-    mVisualObjects.push_back(plan);// [34]
+    mVisualObjects.push_back(plan);// [32]
 
     //**********Set up camera************
     mCurrentCamera = new Camera();
@@ -353,11 +343,18 @@ void RenderWindow::render()
         if((*it)->typeName == "pickup")
             enemy->collision(*it);
 
-//    drawObject(0,27);// trofee collision
-
-
     glUseProgram(mShaderProgram[3]->getProgram() );
     // Fence1
+    glUniformMatrix4fv(vMatrixUniform3,1,GL_TRUE, mCurrentCamera->mViewMatrix.constData());
+    glUniformMatrix4fv(pMatrixUniform3,1,GL_TRUE, mCurrentCamera->mProjectionMatrix.constData());
+    glUniformMatrix4fv(mMatrixUniform3,1,GL_TRUE, mVisualObjects[27]->mMatrix.constData());
+    glUniform3f(mLightPositionUniform1, mLight->mMatrix.getPosition().x, mLight->mMatrix.getPosition().y, mLight->mMatrix.getPosition().z);
+    glUniform3f(mCameraPositionUniform1, mCurrentCamera->position().x, mCurrentCamera->position().y, mCurrentCamera->position().z);
+    glUniform3f(mLightColorUniform1, mLight->mLightColor.x, mLight->mLightColor.y, mLight->mLightColor.y);
+    glUniform1f(mSpecularStrengthUniform1,mLight->mSpecularStrength);
+
+    mVisualObjects[27]->draw();
+    //Fence 2
     glUniformMatrix4fv(vMatrixUniform3,1,GL_TRUE, mCurrentCamera->mViewMatrix.constData());
     glUniformMatrix4fv(pMatrixUniform3,1,GL_TRUE, mCurrentCamera->mProjectionMatrix.constData());
     glUniformMatrix4fv(mMatrixUniform3,1,GL_TRUE, mVisualObjects[28]->mMatrix.constData());
@@ -367,42 +364,35 @@ void RenderWindow::render()
     glUniform1f(mSpecularStrengthUniform1,mLight->mSpecularStrength);
 
     mVisualObjects[28]->draw();
-    //Fence 2
-    glUniformMatrix4fv(vMatrixUniform3,1,GL_TRUE, mCurrentCamera->mViewMatrix.constData());
-    glUniformMatrix4fv(pMatrixUniform3,1,GL_TRUE, mCurrentCamera->mProjectionMatrix.constData());
-    glUniformMatrix4fv(mMatrixUniform3,1,GL_TRUE, mVisualObjects[29]->mMatrix.constData());
-    glUniform3f(mLightPositionUniform1, mLight->mMatrix.getPosition().x, mLight->mMatrix.getPosition().y, mLight->mMatrix.getPosition().z);
-    glUniform3f(mCameraPositionUniform1, mCurrentCamera->position().x, mCurrentCamera->position().y, mCurrentCamera->position().z);
-    glUniform3f(mLightColorUniform1, mLight->mLightColor.x, mLight->mLightColor.y, mLight->mLightColor.y);
-    glUniform1f(mSpecularStrengthUniform1,mLight->mSpecularStrength);
 
-    mVisualObjects[29]->draw();
+    drawObject(0,29);// bezier curve
 
-//    drawObject(0,30);// collidertest
-
-    drawObject(0,31);// bezier curve
-
-    drawObject(0,32);// npc
+    drawObject(0,30);// npc
+    npc->time = time;
     npc->moveTowards();
 
-    if(timer.elapsed() > 2000)
+    if(time == 1)
     {
-        bomb->mMatrix.setPosition(npc->mMatrix.getPosition().x, npc->mMatrix.getPosition().y, npc->mMatrix.getPosition().z);
-        npc->dropBomb();
-        timer.restart();
+    if(timer.elapsed() > 2000)
+        {
+            bomb->mMatrix.setPosition(npc->mMatrix.getPosition().x, npc->mMatrix.getPosition().y, npc->mMatrix.getPosition().z);
+            timer.restart();
 
+        }
     }
 
-    drawObject(0,33);//bomb
+    drawObject(0,31);//bomb
+    bomb->time = time;
 
+    //Oppgave 11
     glUseProgram(mShaderProgram[1]->getProgram() );
     // Texture Plan
     glUniformMatrix4fv(vMatrixUniform1,1,GL_TRUE, mCurrentCamera->mViewMatrix.constData());
     glUniformMatrix4fv(pMatrixUniform1,1,GL_TRUE, mCurrentCamera->mProjectionMatrix.constData());
-    glUniformMatrix4fv(mMatrixUniform1,1,GL_TRUE, mVisualObjects[34]->mMatrix.constData());
+    glUniformMatrix4fv(mMatrixUniform1,1,GL_TRUE, mVisualObjects[32]->mMatrix.constData());
     glUniform1i(mTextureUniform, condition);
     if(bDrawBillboard)
-        mVisualObjects[34]->draw();
+        mVisualObjects[32]->draw();
 
 
     //Calculate framerate before
@@ -484,6 +474,7 @@ void RenderWindow::winCondition()
     if(mia->collectedTrophies == 10)
     {
         bDrawBillboard = true;
+        condition = 3;
         time = 0;
     }
     if(enemy->collectedTrophies == 10)
@@ -522,6 +513,10 @@ void RenderWindow::reset()
 
     mia->mMatrix.setPosition(50,0,70);
     enemy->mMatrix.setPosition(60,0,70);
+    time = 1;
+    bDrawBillboard = false;
+    npc->mMatrix.setPosition(bez->getVertices().at(0).m_xyz[0], bez->getVertices().at(0).m_xyz[1], bez->getVertices().at(0).m_xyz[2]);
+    npc->turn = false;
 }
 
 void RenderWindow::drawObject(int shadeNum, int objNum)
@@ -662,17 +657,16 @@ void RenderWindow::handleInput()
         if(mInput.W)
             mMap["mia"]->mMatrix.translateZ(-mia->speed);
         if(mInput.A)
-            mMap["mia"]->mMatrix.rotateY(-2);
+            mMap["mia"]->mMatrix.rotateY(-mia->speed * 20);
         if(mInput.S)
             mMap["mia"]->mMatrix.translateZ(mia->speed);
         if(mInput.D){
-            mMap["mia"]->mMatrix.rotateY(2);
+            mMap["mia"]->mMatrix.rotateY(mia->speed * 20);
 
         }
 
         float y = mHeightmap->SetYCoord(mMap["mia"]->mMatrix.getPosition().getX(), mMap["mia"]->mMatrix.getPosition().getZ());
         mMap["mia"]->mMatrix.setPositionY(y + 1);
-//        qDebug() << mMap["mia"]->mMatrix.getPosition();
 
         mCurrentCamera->setPosition(mMap["mia"]->mMatrix.getPosition() + gsl::Vector3D(2, 20, 15));
     }
@@ -691,9 +685,6 @@ void RenderWindow::handleInput()
         if(mInput.Q)
             mCurrentCamera->updateHeigth(-speed);
     }
-    if(bomb != nullptr)
-        mia->collisionWithBomb(bomb->mesh);
-
 
     auto posisjon = mMap["mia"]->getPosition2D();
     auto subtre = mQuadTre->find(posisjon);
@@ -722,10 +713,6 @@ void RenderWindow::keyPressEvent(QKeyEvent *event)
     if(event->key() == Qt::Key_D)
         mInput.D = true;
 
-    if(event->key() == Qt::Key_Shift)
-        mInput.LShift = true;
-    if(event->key() == Qt::Key_Control)
-        mInput.LCtrl = true;
 
     if(event->key() == Qt::Key_P)
         enemy->stun();
@@ -763,11 +750,6 @@ void RenderWindow::keyReleaseEvent(QKeyEvent *event)
     if(event->key() == Qt::Key_D)
         mInput.D = false;
 
-    if(event->key() == Qt::Key_Shift)
-        mInput.LShift = false;
-    if(event->key() == Qt::Key_Control)
-        mInput.LCtrl = false;
-
     if(event->key() == Qt::Key_E)
         mInput.E = false;
     if(event->key() == Qt::Key_Q)
@@ -795,8 +777,7 @@ void RenderWindow::mouseMoveEvent(QMouseEvent *event)
     {
         mouseX = event->pos().x() - mouseX;
         mouseY = event->pos().y() - mouseY;
-//        qDebug() << mouseX;
-//        qDebug() << mouseY;
+
         mCurrentCamera->yaw(mouseX * 0.1);
         mCurrentCamera->pitch(mouseY * 0.1);
 

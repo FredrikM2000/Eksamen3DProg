@@ -22,24 +22,17 @@ public:
     void draw() override;
     void collision(VisualObject* gameObject);
     void createCollisionBox(bool draw);
-    void createCollisionSphere();
-    void collisionWithBomb(ObjMesh* bomb);
-    void spawnBillboard();
     void stun();
 
     float speed = 0.15;
     int collectedTrophies{0};
 private:
-   TriangleSurface* curve;
-   float mx, my, mz; // posisjon
    float distance{0.15};
 
    ObjMesh *mesh;
    CollisionAABB *collider;
    CollisionSphere *sphere;
-   Plan* plan;
 
-   bool bdrawPLan{false};
    bool bDrawBox;
 
    QElapsedTimer timer;

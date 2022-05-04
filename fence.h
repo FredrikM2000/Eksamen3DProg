@@ -10,7 +10,6 @@ public:
     ~Fence();
     void init(GLint matrixUniform);
     void draw();
-
 };
 
 #endif // FENCE_H

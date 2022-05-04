@@ -15,10 +15,8 @@ public:
     ~Enemy();
     void init(GLint matrixUniform) override;
     void draw() override;
-    void move();
     void moveTowards();
     void collision(VisualObject* gameObject);
-    void construct();
     void createCollisionBox(bool draw);
     void stun();
 
@@ -27,7 +25,6 @@ public:
     int time{1};
     int collectedTrophies{0};
 private:
-    float mx{0}, dt{0.02};
     float speed = 0.1;
 
     bool hit{false};

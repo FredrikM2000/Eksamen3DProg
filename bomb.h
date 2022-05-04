@@ -12,9 +12,9 @@ public:
     ~Bomb();
     void init(GLint matrixUniform) override;
     void draw() override;
-    void createMesh();
 
     ObjMesh* mesh;
+    int time;
 };
 
 #endif // BOMB_H

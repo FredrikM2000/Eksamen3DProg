@@ -2,7 +2,6 @@
 
 CollisionAABB::CollisionAABB()
 {
-
     mVertices.push_back(Vertex{0,0,0});
     mVertices.push_back(Vertex{1,0,0});
     mVertices.push_back(Vertex{1,0,1});

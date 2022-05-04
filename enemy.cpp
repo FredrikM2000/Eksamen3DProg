@@ -65,18 +65,7 @@ void Enemy::draw()
         collider->draw();
 
     if(timer.elapsed() > 2000)
-        speed = 0.15;
-}
-
-void Enemy::move()
-{
-    if(mx > 3 || mx < -3)
-        dt = dt * -1;
-
-    mx += dt;
-    mMatrix.translateX(dt);
-
-
+        speed = 0.1;
 }
 
 void Enemy::moveTowards() //Oppgave 9
@@ -89,8 +78,6 @@ void Enemy::moveTowards() //Oppgave 9
     gsl::Vector2D pos = this->mMatrix.getPosition2D();
     gsl::Vector2D distance = {trophyXZ.x - pos.x, trophyXZ.z - pos.z};
 
-//    qDebug() << currentEnemy;
-
     distance.normalize();
     mMatrix.translateX(distance.x * speed * time);
     mMatrix.translateZ(distance.z * speed * time);
@@ -99,6 +86,7 @@ void Enemy::moveTowards() //Oppgave 9
 void Enemy::collision(VisualObject* gameObject)//Oppgave 9
 {
     if(gameObject->m_name == "blue")
+    {
         if(collider->isColliding(gameObject, this->mMatrix.getPosition2D()))
         {
             if(gameObject->bDraw){
@@ -106,7 +94,7 @@ void Enemy::collision(VisualObject* gameObject)//Oppgave 9
                 gameObject->bDraw = false;
             }
         }
-
+    }
 }
 
 void Enemy::createCollisionBox(bool draw)
