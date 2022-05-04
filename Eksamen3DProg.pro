@@ -9,6 +9,7 @@ INCLUDEPATH += ./gsl
 
 SOURCES += main.cpp \
     beziercurve.cpp \
+    bomb.cpp \
     camera.cpp \
     collisionaabb.cpp \
     collisionsphere.cpp \
@@ -48,6 +49,7 @@ HEADERS += \
     Input.h \
     QuadTre.h \
     beziercurve.h \
+    bomb.h \
     camera.h \
     collisionaabb.h \
     collisionsphere.h \

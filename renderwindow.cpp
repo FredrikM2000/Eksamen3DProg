@@ -9,6 +9,7 @@
 #include <QDebug>
 
 #include <string>
+#include <QElapsedTimer>
 
 #include "shader.h"
 #include "mainwindow.h"
@@ -37,8 +38,12 @@ RenderWindow::RenderWindow(const QSurfaceFormat &format, MainWindow *mainWindow)
      mQuadTre->subDivide(1);
 
 
+    timer.start();
+
+
     //Make the gameloop timer:
     mRenderTimer = new QTimer(this);
+
 }
 
 RenderWindow::~RenderWindow()
@@ -154,6 +159,7 @@ void RenderWindow::init()
     mia = new InteractiveObject();
     mia->init(mMatrixUniform2);
     mia->createCollisionBox(false);
+    mia->createCollisionSphere();
     mia->mMatrix.setPosition(50,0,70);
     mVisualObjects.push_back(mia);// [3]
     mMap.insert(std::pair<std::string, VisualObject*>{"mia", mia});
@@ -216,7 +222,23 @@ void RenderWindow::init()
 
     temp = new CollisionAABB(fence);
     temp->init(mMatrixUniform0);
-    mVisualObjects.push_back(temp);
+    mVisualObjects.push_back(temp);//[30]
+
+    bez = new BezierCurve();
+    bez->init(mMatrixUniform0);
+    mVisualObjects.push_back(bez);// [31]
+
+    npc = new NPC(bez->getVertices());
+    npc->init(mMatrixUniform0);
+//    temp->mMatrix.scale(10);
+    npc->mMatrix.setPosition(bez->getVertices().at(0).m_xyz[0], bez->getVertices().at(0).m_xyz[1], bez->getVertices().at(0).m_xyz[2]);
+    mVisualObjects.push_back(npc);// [32]
+
+    bomb = new Bomb();
+    bomb->init(mMatrixUniform0);
+    bomb->mMatrix.setPosition(50,20,50);
+    mVisualObjects.push_back(bomb);// [33]
+    mQuadTre->insert(bomb->getPosition2D(), bomb);
 
     //**********Set up camera************
     mCurrentCamera = new Camera();
@@ -252,6 +274,7 @@ void RenderWindow::render()
 
     checkForGLerrors();
 
+//    qDebug() << timer.elapsed();
 
     //Oppgave 2
     glUseProgram(mShaderProgram[2]->getProgram() );
@@ -345,7 +368,18 @@ void RenderWindow::render()
 
 //    drawObject(0,30);// collidertest
 
+    drawObject(0,31);// bezier curve
 
+    drawObject(0,32);// npc
+    npc->moveTowards();
+
+    if(timer.elapsed() > 2000)
+    {
+        npc->dropBombs();
+        timer.restart();
+    }
+
+    drawObject(0,33);//bomb
 
     //Calculate framerate before
     // checkForGLerrors() because that call takes a long time
@@ -636,7 +670,7 @@ void RenderWindow::handleInput()
     auto posisjon = mMap["mia"]->getPosition2D();
     auto subtre = mQuadTre->find(posisjon);
     for (auto it=subtre->m_sub_objects.begin();it!=subtre->m_sub_objects.end();it++)
-        if((*it)->typeName == "pickup" || (*it)->typeName == "fence")
+        if((*it)->typeName == "pickup" || (*it)->typeName == "fence" || (*it)->typeName == "fence")
             mia->collision(*it);
 }
 

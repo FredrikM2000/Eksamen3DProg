@@ -1,5 +1,4 @@
 #include "npc.h"
-
 NPC::NPC()
 {
     Vertex k1(-0.1,-0.1,0.1,0,0,1);
@@ -20,6 +19,27 @@ NPC::NPC()
 
     mPosition(0,3) = mx;
     mPosition(1,3) = curve->func1(mx);
+
+    mMatrix.setToIdentity();
+}
+
+NPC::NPC(std::vector<Vertex> vertices)
+{
+
+    mVertices.push_back(Vertex{0,0,0, 0,0,5});
+    mVertices.push_back(Vertex{5,0,0, 0,0,5});
+    mVertices.push_back(Vertex{5,0,5, 0,0,5});
+    mVertices.push_back(Vertex{0,0,5, 0,0,5});
+    mVertices.push_back(Vertex{0,5,0, 0,0,5});
+    mVertices.push_back(Vertex{5,5,0, 0,0,5});
+    mVertices.push_back(Vertex{5,5,5, 0,0,5});
+    mVertices.push_back(Vertex{0,5,5, 0,0,5});
+
+    mIndices.insert(mIndices.end(), {0,1,4, 1,4,5, 1,2,5, 5,2,6, 2,3,6, 6,3,7, 3,0,7, 7,0,2, 0,1,2, 0,2,3, 4,5,6, 4,6,7});
+
+    otherVertices = vertices;
+
+    mMatrix.setToIdentity();
 }
 
 NPC::~NPC()
@@ -55,31 +75,84 @@ void NPC::init(GLint matrixUniform)
 
         glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE,  sizeof(Vertex),  reinterpret_cast<GLvoid*>(3 * sizeof(GLfloat)) );
         glEnableVertexAttribArray(1);
+        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE,  sizeof(Vertex),  reinterpret_cast<GLvoid*>(6 * sizeof(GLfloat)) );
+        glEnableVertexAttribArray(2);
+
+        glGenBuffers ( 1, &mEAB );
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mEAB);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, mIndices.size()*sizeof(GLuint), mIndices.data(), GL_STATIC_DRAW);
+
         glBindVertexArray(0);
+
 }
 
 void NPC::draw()
 {
-    glBindVertexArray( mVAO );
-    glUniformMatrix4fv( mMatrixUniform, 1, GL_FALSE, mMatrix.constData());
-    glDrawArrays(GL_TRIANGLES, 0, mVertices.size());
+    glBindVertexArray(mVAO);
+    glDrawElements(GL_TRIANGLES, mIndices.size(), GL_UNSIGNED_INT, nullptr);
+    glBindVertexArray(0);
+
+//    qDebug() << mMatrix.getPosition();
+//    moveTowards();
+
 }
 
 void NPC::move()
 {
-    if(mx > 2)
-        dt = dt * -1;
-    else if(mx < -2)
-        dt = dt * -1;
+//    if(mx > 2)
+//        dt = dt * -1;
+//    else if(mx < -2)
+//        dt = dt * -1;
 
-    mx += dt;
-    mPosition(0,3) = mx;
-    if(bCurrentGraph)
-        mPosition(1,3) = curve->func1(mx);
-    else
-        mPosition(1,3) = curve->func2(mx);
+//    mx += dt;
+//    mPosition(0,3) = mx;
+//    if(bCurrentGraph)
+//        mPosition(1,3) = curve->func1(mx);
+//    else
+//        mPosition(1,3) = curve->func2(mx);
 
-    mMatrix = mPosition;
+//    mMatrix = mPosition;
+}
+
+void NPC::moveTowards()
+{//Oppgave 7
+    if(i > otherVertices.size()-1)
+    {
+        turn = true;
+        i--;
+    }
+
+    if(i < 0)
+    {
+        turn = false;
+        i += 2;
+    }
+
+        float x = otherVertices[i].m_xyz[0];
+        float y = otherVertices[i].m_xyz[1];
+        float z = otherVertices[i].m_xyz[2];
+
+        gsl::Vector3D pos = mMatrix.getPosition();
+        gsl::Vector3D distance = {x - pos.x, y - pos.y, z - pos.z};
+
+//        qDebug() << distance << i;
+
+
+        {
+        if(abs(distance.x) < 0.1 && abs(distance.y) < 0.1 && abs(distance.z) < 0.1)
+
+        {
+            if(!turn)
+                i++;
+            else
+                i--;
+        }
+        distance.normalize();
+
+        mMatrix.translateX(distance.x * speed * time);
+        mMatrix.translateY(distance.y * speed * time);
+        mMatrix.translateZ(distance.z * speed * time);
+    }
 }
 
 void NPC::switchGraph()
@@ -88,6 +161,11 @@ void NPC::switchGraph()
         bCurrentGraph = false;
     else
         bCurrentGraph = true;
+}
+
+void NPC::dropBombs()
+{
+    qDebug() << "Well done";
 }
 
 void NPC::side(Vertex m_k1, Vertex m_k2, Vertex m_k3, Vertex m_k4)

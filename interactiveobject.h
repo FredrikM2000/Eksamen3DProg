@@ -18,6 +18,7 @@ public:
     void readFile();
     void collision(VisualObject* gameObject);
     void createCollisionBox(bool draw);
+    void createCollisionSphere();
 
     float speed = 0.15;
     int collectedTrophies{0};
@@ -28,6 +29,7 @@ private:
 
    ObjMesh *mesh;
    CollisionAABB *collider;
+   CollisionSphere *sphere;
 
    bool bDrawBox;
 };

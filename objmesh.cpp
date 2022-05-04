@@ -128,6 +128,9 @@ void ObjMesh::readFile(std::string filename, bool useNormals, float r, float g, 
 
 void ObjMesh::init(GLint matrixUniform)
 {
+    if(!bDraw)
+        return;
+
     mMatrixUniform =matrixUniform;
     initializeOpenGLFunctions();
 

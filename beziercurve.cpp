@@ -3,10 +3,10 @@
 BezierCurve::BezierCurve()
 {
 
-    c[0] = gsl::Vector3D(0,0,0);
-    c[1] = gsl::Vector3D(50,20,0);
-    c[2] = gsl::Vector3D(100,0,0);
-    c[3] = gsl::Vector3D(50,-20,0.f);
+    c[0] = gsl::Vector3D(70,10,65);
+    c[1] = gsl::Vector3D(70,10,35);
+    c[2] = gsl::Vector3D(30,10,55);
+    c[3] = gsl::Vector3D(40,10,60);
 
     double  dt=0.05;
      for (auto t=0.0; t<1.001; t+=dt)
@@ -16,7 +16,6 @@ BezierCurve::BezierCurve()
         mVertices.push_back(v);
      }
      mMatrix.setToIdentity();
-
 }
 
 BezierCurve::~BezierCurve()
@@ -75,4 +74,6 @@ void BezierCurve::draw()
     glBindVertexArray( mVAO );
     glUniformMatrix4fv( mMatrixUniform, 1, GL_FALSE, mMatrix.constData());
     glDrawArrays(GL_LINE_STRIP, 0, mVertices.size());
+//    if(npc)
+//        npc->draw();
 }

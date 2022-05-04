@@ -36,6 +36,7 @@
 #include "objmesh.h"
 #include "collisionaabb.h"
 #include "fence.h"
+#include "bomb.h"
 
 #include "Input.h"
 
@@ -91,6 +92,7 @@ private:
     Enemy* enemy;
     Trofee* trofee;
     Fence* fence;
+    Bomb* bomb;
 
 
     void init();            //initialize things we need before rendering
@@ -193,6 +195,9 @@ private:
     void drawPhong(int objNum);
 
     void winCondition();
+
+    QElapsedTimer timer;
+
 
 protected:
     //The QWindow that we inherit from have these functions to capture

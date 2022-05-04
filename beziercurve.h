@@ -1,8 +1,8 @@
 #ifndef BEZIERCURVE_H
 #define BEZIERCURVE_H
 
-#include <QOpenGLFunctions_4_1_Core>
 #include "visualobject.h"
+#include "npc.h"
 
 class BezierCurve : public VisualObject
 {
@@ -18,6 +18,9 @@ public:
     gsl::Vector3D evaluateBezier(float t);
     void init(GLint matrixUniform) override;
     void draw() override;
+
+private:
+    NPC* npc;
 };
 
 #endif // BEZIERCURVE_H

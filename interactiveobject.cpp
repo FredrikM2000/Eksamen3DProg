@@ -114,6 +114,10 @@ void InteractiveObject::collision(VisualObject* gameObject)
                 collectedTrophies++;
             }
 
+    if(gameObject->typeName == "bomb")
+        if(sphere->isColliding(gameObject, playerPos))
+            qDebug() << "Funka";
+
 }
 
 void InteractiveObject::createCollisionBox(bool draw)
@@ -121,6 +125,12 @@ void InteractiveObject::createCollisionBox(bool draw)
     collider = new CollisionAABB (this->mesh);
     collider->init(mMatrixUniform);
     bDrawBox = draw;
+}
+
+void InteractiveObject::createCollisionSphere()
+{
+    sphere = new CollisionSphere (this->mesh);
+    sphere->init(mMatrixUniform);
 }
 
 

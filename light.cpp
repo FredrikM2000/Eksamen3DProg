@@ -27,10 +27,7 @@ Light::Light()
 void Light::init(GLint matrixUniform)
 {
     mMatrixUniform = matrixUniform;
-//    if(obj)
-//        obj->init(mMatrixUniform);
-//    else
-//    {
+
     initializeOpenGLFunctions();
 
     //Vertex Array Object - VAO
@@ -62,7 +59,6 @@ void Light::init(GLint matrixUniform)
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, mIndices.size() * sizeof(GLuint), mIndices.data(), GL_STATIC_DRAW);
 
     glBindVertexArray(0);
-//    }
 }
 
 void Light::draw()

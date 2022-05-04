@@ -72,16 +72,14 @@ void CollisionSphere::draw()
 
 bool CollisionSphere::isColliding(VisualObject *other, gsl::Vector2D playerPos)
 {
+    //Oppgave 7
     std::vector<float> this_values = findValues(this);
     std::vector<float> other_values = findValues(other);
 
-    float distX = abs(this_values[0] - other_values[0]);
-    float distZ = abs(this_values[1] - other_values[1]);
 
-    float distance = sqrt(pow(distX,2) + pow(distZ,2));
+    float distance = sqrt(pow(this_values[0] - other_values[0], 2) + pow(this_values[1] - other_values[1],2) + pow(this_values[2] - other_values[2], 2));
 
-    qDebug() << other_values;
-    if (distance < (this_values[2] + other_values[2]))
+    if (distance < (this_values[3] + other_values[3]))
         return true;
     return false;
 }
@@ -90,15 +88,15 @@ std::vector<float> CollisionSphere::findValues(VisualObject *obj)
 {
     std::vector<float> MinMax = findMinMax(obj);
 
-    float radius = findRadius(MinMax[0], MinMax[1], MinMax[2], MinMax[3]);
+    float radius = findRadius(MinMax[0], MinMax[1], MinMax[2], MinMax[3], MinMax[4], MinMax[5]);
 
-    std::vector<float> values = {MinMax[0], MinMax[1], MinMax[2], MinMax[3], radius};
-    gsl::Vector2D punkt = gsl::Vector2D(MinMax[0] + radius + obj->mMatrix.getPosition2D().x, MinMax[2] + radius + obj->mMatrix.getPosition2D().z);
+    gsl::Vector3D pos = obj->mMatrix.getPosition();
+    gsl::Vector3D punkt = {MinMax[0] + radius + pos.x, MinMax[1] + radius + pos.y, MinMax[2] + radius + pos.z};
 
-    return {punkt.x, punkt.z, radius};
+    return {punkt.x, punkt.y, punkt.z, radius};
 }
 
-float CollisionSphere::findRadius(float a, float b, float c, float d)
+float CollisionSphere::findRadius(float a, float b, float c, float d, float e, float f)
 {
 float length;
 
@@ -113,6 +111,12 @@ float length;
     if(d && length < d)
         length = d;
 
+    if(e && length < e)
+        length = e;
+
+    if(f && length < f)
+        length = f;
+
     return length/2;
 }
 
@@ -122,6 +126,8 @@ std::vector<float> CollisionSphere::findMinMax(VisualObject *obj)
 
     float minX = vertices[0].m_xyz[0];
     float maxX = vertices[0].m_xyz[0];
+    float minY = vertices[0].m_xyz[1];
+    float maxY = vertices[0].m_xyz[1];
     float minZ = vertices[0].m_xyz[2];
     float maxZ = vertices[0].m_xyz[2];
 
@@ -131,10 +137,14 @@ std::vector<float> CollisionSphere::findMinMax(VisualObject *obj)
             minX = vertices[i].m_xyz[0];
         if(vertices[i].m_xyz[0] > maxX)
             maxX = vertices[i].m_xyz[0];
+        if(vertices[i].m_xyz[1] < minY)
+            minY = vertices[i].m_xyz[1];
+        if(vertices[i].m_xyz[1] > maxY)
+            maxY = vertices[i].m_xyz[1];
         if(vertices[i].m_xyz[2] < minZ)
             minZ = vertices[i].m_xyz[2];
         if(vertices[i].m_xyz[2] > maxZ)
             maxZ = vertices[i].m_xyz[2];
     }
-    return {minX, maxX, minZ, maxZ};
+    return {minX, maxX, minY, maxY, minZ, maxZ};
 }
